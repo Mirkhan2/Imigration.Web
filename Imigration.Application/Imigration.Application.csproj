@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+    <Folder Include="Convertors\" />
+    <Folder Include="Generators\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Imigration.DataLayer\Imigration.DataLayer.csproj" />
+    <ProjectReference Include="..\Imigration.Domains\Imigration.Domains.csproj" />
+  </ItemGroup>
+
+</Project>
