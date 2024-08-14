@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Imigration.DataLayer.Context;
+﻿using Imigration.DataLayer.Context;
 using Imigration.Domains.Entities.Account;
 using Imigration.Domains.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -20,22 +15,36 @@ namespace Imigration.DataLayer.Repositories
             _context = context;
         }
 
-        public Task CreateUser(User user)
-        {
-            throw new NotImplementedException();
-        }
-
-
         #endregion
+
         public async Task<bool> IsExistsUserByEmail(string email)
         {
             return await _context.Users.AnyAsync(s => s.Email == email);
 
         }
 
-        public Task Save()
+        public async Task CreateUser(User user)
         {
-            throw new NotImplementedException();
+           await _context.Users.AddAsync(user); 
+        }
+        public async Task<User> GetUserByEmail(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(s => s.Email.Equals(email));
+        }
+
+        public async Task Save()
+        {
+           await _context.SaveChangesAsync();
+        }
+
+        public async Task<User> GetUserByActivationCode(string activationCode)
+        {
+            return await _context.Users.FirstOrDefaultAsync(s=> s.EmailActivationCode.Equals(activationCode));  
+        }
+
+        public async Task UpdateUser(User user)
+        {
+           _context.Update(user);
         }
     }
 }

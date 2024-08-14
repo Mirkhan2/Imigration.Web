@@ -46,6 +46,8 @@ namespace Imigration.Domains.Entities.Account
         public string EmailActivationCode { get; set; }
 
         public string Avatar { get; set; }
+        public bool IsDelete { get; set; }
+        public long Id { get; set; }
 
         #endregion
 

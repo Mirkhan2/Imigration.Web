@@ -1,7 +1,10 @@
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
+using GoogleReCaptcha.V3;
+using GoogleReCaptcha.V3.Interface;
 using Imigration.DataLayer.Context;
 using Imigration.IoC;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,12 +14,30 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
 
 #region DbContext
 
 builder.Services.AddDbContext<ImigrationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("ImigrationConnection"))
 );
+#endregion
+
+#region Authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+}).AddCookie(options =>
+{
+    options.LoginPath = "/Login";
+    options.LogoutPath = "/Logout";
+    options.ExpireTimeSpan = TimeSpan.FromDays(30);
+
+});
 #endregion
 
 #region Encode
@@ -49,7 +70,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

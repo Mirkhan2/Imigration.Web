@@ -13,7 +13,10 @@ namespace Imigration.Domains.Interfaces
         Task<bool> IsExistsUserByEmail(string email);
 
         Task CreateUser(User user);
+        Task UpdateUser(User user);
 
+        Task<User> GetUserByEmail(string email);
+        Task<User> GetUserByActivationCode(string activationCode);
         Task Save();
     }
 }

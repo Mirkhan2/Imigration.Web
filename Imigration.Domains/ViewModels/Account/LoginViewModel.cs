@@ -8,9 +8,8 @@ using Imigration.Domains.ViewModels.Common;
 
 namespace Imigration.Domains.ViewModels.Account
 {
-    public class RegisterViewModel : GoogleRecaptchaViewModel
+    public class LoginViewModel : GoogleRecaptchaViewModel
     {
-
         [Display(Name = "ایمیل")]
         [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         [EmailAddress(ErrorMessage = "ایمیل وارد شده معتبر نمی باشد .")]
@@ -21,17 +20,15 @@ namespace Imigration.Domains.ViewModels.Account
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
         [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
         public string Password { get; set; }
+        public string? ReturnUrl { get; set; }
 
-        [Display(Name = "تکرار کلمه عبور")]
-        [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
-        [MaxLength(100, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد")]
-        [Compare("Password", ErrorMessage = "کلمه های عبور مغایرت دارند .")]
-        public string RePassword { get; set; }
+        public bool  RememberMe { get; set; }
     }
-
-    public enum RegisterResult
+    public enum LoginResult
     {
         Success,
-        EmailExists
+        UserIsBan,
+        UserNotFound,
+        EmailNotActivated
     }
 }
