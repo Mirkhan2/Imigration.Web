@@ -24,5 +24,21 @@ namespace Imigration.Application.Services.Interfaces
         #region Email Activation
         Task<bool> ActivateUserEmail(string activationCode);
         #endregion
+
+        #region Forgot Password
+
+        Task<ForgotPasswordResult> ForgotPassword(ForgotPasswordViewModel forgotPassword);
+        #endregion
+
+        #region RAeset Password
+
+        Task<ResetPasswordResult>  ResetPassword(ResetPasswordViewModel resetPassword);
+        Task<User> GetUserByActivationCode(string activationCode);
+        #endregion
+
+        #region USer Panel
+        Task<User?> GetUserById(long userId);
+        Task ChangeUserAvatar(long userId, string fileName);
+        #endregion
     }
 }

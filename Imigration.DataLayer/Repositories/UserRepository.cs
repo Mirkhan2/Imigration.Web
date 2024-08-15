@@ -46,5 +46,10 @@ namespace Imigration.DataLayer.Repositories
         {
            _context.Update(user);
         }
+
+        public async Task<User?> GetUserById(long userId)
+        {
+           return await _context.Users.FirstOrDefaultAsync(s => !s.IsDelete && s.Id == userId);
+        }
     }
 }

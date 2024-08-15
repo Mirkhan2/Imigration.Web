@@ -17,6 +17,7 @@ namespace Imigration.Domains.Interfaces
 
         Task<User> GetUserByEmail(string email);
         Task<User> GetUserByActivationCode(string activationCode);
+        Task<User?> GetUserById(long  userId);
         Task Save();
     }
 }

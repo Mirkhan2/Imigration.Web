@@ -12,9 +12,11 @@ namespace Imigration.Application.Services.Implementions
     {
         #region Ctor
         private readonly IUserRepository _userRepository;
-        public UserService(IUserRepository userRepository)
+        private readonly IEmailService _emailService;
+        public UserService(IUserRepository userRepository, IEmailService emailService)
         {
             _userRepository = userRepository;
+            _emailService = emailService;
         }
         #endregion
 
@@ -91,6 +93,7 @@ namespace Imigration.Application.Services.Implementions
 
 
         #endregion
+
         #region Activation Email
 
         public async Task<bool> ActivateUserEmail(string activationCode)
@@ -109,6 +112,87 @@ namespace Imigration.Application.Services.Implementions
             return true;
         }
 
+
+
         #endregion
+
+        #region ForgotPassword
+        public async Task<ForgotPasswordResult> ForgotPassword(ForgotPasswordViewModel forgotPassword)
+        {
+            var email = forgotPassword.Email.SanitizeText().Trim().ToLower();
+
+            var user = await _userRepository.GetUserByEmail(email);
+
+            if (user == null || user.IsDelete) return ForgotPasswordResult.UserNotFound;
+
+            if (user.IsBan) return ForgotPasswordResult.UserBan;
+
+            #region Send Activation Email
+
+            var body = $@"
+                <div> برای فراموشی کلمه عبور روی لینک زیر کلیک کنید . </div>
+                <a href='{PathTools.SiteAddress}/Reset-Password/{user.EmailActivationCode}'>فراموشی کلمه عبور</a>
+                ";
+
+            await _emailService.SendEmail(user.Email, "فراموشی کلمه عبور", body);
+
+            #endregion
+
+            return ForgotPasswordResult.Success;
+        }
+
+
+        #endregion
+
+        #region ResetPassword
+
+        public async Task<ResetPasswordResult> ResetPassword(ResetPasswordViewModel resetPassword)
+        {
+            var user = await _userRepository.GetUserByActivationCode(resetPassword.EmailActivationCode.SanitizeText());
+
+            if (user == null || user.IsDelete) return ResetPasswordResult.UserNotFound;
+
+            if (user.IsBan) return ResetPasswordResult.UserIsBan;
+
+            var password = PasswordHelper.EncodePasswordMd5(resetPassword.Password.SanitizeText());
+
+            user.Password = password;   
+
+            user.IsEmailConfirmed = true;
+            user.EmailActivationCode = CodeGenerator.CreateActivationCode();
+
+            await _userRepository.UpdateUser(user);
+            await _userRepository.Save();
+
+            return ResetPasswordResult.Success;
+
+            
+        }
+
+        public async Task<User> GetUserByActivationCode(string activationCode)
+        {
+            return await _userRepository.GetUserByActivationCode(activationCode.SanitizeText());
+        }
+
+
+        #endregion
+
+        #region User Panel
+        public async Task<User?> GetUserById(long userId)
+        {
+            return await _userRepository.GetUserById(userId);
+        }
+
+        public async Task ChangeUserAvatar(long userId, string fileName)
+        {
+            var user = await GetUserById(userId);
+
+            user.Avatar = fileName;
+            await _userRepository.UpdateUser(user);
+            await _userRepository.Save();
+
+        }
+        #endregion
+
     }
 }

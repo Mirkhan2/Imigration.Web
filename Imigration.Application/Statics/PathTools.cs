@@ -8,9 +8,15 @@ namespace Imigration.Application.Statics
 {
     public class PathTools
     {
-        public static readonly string DefaultUserAvatar = "/content/user/DefaultAvatar.png";
+        #region User
+        public static readonly string DefaultUserAvatar = "DefaultAvatar.png";
+
+        public static readonly string UserAvatarServerPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwrroot/content/user/");
+        public static readonly string UserAvatarPath = "/content/user/";
 
 
+
+        #endregion
 
         #region Site
 
