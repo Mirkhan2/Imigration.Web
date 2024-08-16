@@ -177,7 +177,7 @@ namespace Imigration.Web.Controllers
 
         #region Forgot Password
         [HttpGet("Forgot-Password")]
-        public async Task<IActionResult> ForgotPAssword()
+        public async Task<IActionResult> ForgotPassword()
         {
             return View();
         }
