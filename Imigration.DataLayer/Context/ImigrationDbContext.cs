@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Imigration.Domains.Entities.Account;
+using Imigration.Domains.Entities.Location;
 using Imigration.Domains.Entities.SiteSetting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -23,10 +24,11 @@ namespace Imigration.DataLayer.Context
         #region DbSet
         public DbSet<User> Users { get; set; }
         public DbSet<EmailSetting> EmailSettings { get; set; }
+        public DbSet<State> States { get; set; }
 
 
         #endregion
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region Seed Data

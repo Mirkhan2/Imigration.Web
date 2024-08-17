@@ -77,7 +77,7 @@ namespace Imigration.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Imigration.Domains.Entities.SiteSetting.EmailSetting", b =>
@@ -121,7 +121,7 @@ namespace Imigration.DataLayer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EmailSettings");
+                    b.ToTable("EmailSettings", (string)null);
 
                     b.HasData(
                         new

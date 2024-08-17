@@ -1,20 +1,18 @@
 ﻿@{
-	Layout = "_Layout";
-	 ViewData["Title"] = ViewData["Title"];
+    Layout = "_Layout";
+    ViewData["Title"] = ViewData["Title"];
 }
 
 @section Styles
-{
-	@await RenderSectionAsync("Styles", false)
-	<link rel="stylesheet" type="text/css" href="/css//account.css">
-
+    {
+    @await RenderSectionAsync("Styles", false)
+    <link rel="stylesheet" type="text/css" href="/css/account.css">
 }
 
 @section Header
-{
-	@await RenderSectionAsync("Header" , true)
+    {
+    <partial name="_Header" />
 }
-
 
 @section Scripts
     {

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Imigration.Domains.Entities.Location;
 
 namespace Imigration.Domains.Entities.Account
 {
@@ -36,6 +38,11 @@ namespace Imigration.Domains.Entities.Account
 
         [Display(Name = "توضیحات")]
         public string? Description { get; set; }
+        public DateTime? BirthDate { get; set; }
+        public long? CountryId { get; set; }
+        public long? CityId { get; set; }
+        //khabarname
+        public bool GetNewsLetter { get; set; }
 
         public bool IsEmailConfirmed { get; set; }
 
@@ -52,8 +59,10 @@ namespace Imigration.Domains.Entities.Account
         #endregion
 
         #region Relations
-
-
+        [InverseProperty("UserCountries")]
+        public State?    Country { get; set; }
+        [InverseProperty("UserCities")]
+        public State? City { get; set; }
 
         #endregion
     }

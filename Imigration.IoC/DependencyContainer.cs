@@ -12,11 +12,17 @@ namespace Imigration.IoC
         {
             #region Services
             services.AddScoped<IUserService , UserService>();
+            services.AddScoped<IEmailService , EmailService>();
+            services.AddScoped<IStateService, StateService>();
+
 
             #endregion
 
             #region Repositories
             services.AddScoped<IUserRepository , UserRepository>();
+            services.AddScoped<ISiteSettingRepository, SiteSettingRepository>();
+            services.AddScoped<IStateRepository, StateRepository>();
+
             #endregion
         }
     }
