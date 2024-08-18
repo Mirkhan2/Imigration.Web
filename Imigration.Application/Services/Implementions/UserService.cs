@@ -1,10 +1,12 @@
-﻿using Imigration.Application.Generators;
+﻿using Imigration.Application.Extensions;
+using Imigration.Application.Generators;
 using Imigration.Application.Security;
 using Imigration.Application.Services.Interfaces;
 using Imigration.Application.Statics;
 using Imigration.Domains.Entities.Account;
 using Imigration.Domains.Interfaces;
 using Imigration.Domains.ViewModels.Account;
+using Imigration.Domains.ViewModels.UserPanel.Account;
 
 namespace Imigration.Application.Services.Implementions
 {
@@ -191,6 +193,76 @@ namespace Imigration.Application.Services.Implementions
             await _userRepository.UpdateUser(user);
             await _userRepository.Save();
 
+        }
+
+        public async Task<EditUserViewModel> FillEditUserViewModel(long userId)
+        {
+                var user = await _userRepository.GetUserById(userId);
+
+            var result = new EditUserViewModel()
+            {
+                BirthDate = user.BirthDate != null ? user.BirthDate.Value.ToShamsi() : string.Empty,
+                CityId = user.CityId,
+                CountryId = user.CountryId,
+                Description = user.Description,
+                FirstName = user.FirstName ?? string.Empty,
+                LastName = user.LastName ?? string.Empty,
+                GetNewsLetter = user.GetNewsLetter,
+                PhoneNumber = user.PhoneNumber,
+            };
+            return result;
+        
+        }
+
+        public async Task<EditUserInfoResult> EditUserInfo(EditUserViewModel editUserViewModel, long userId)
+        {
+            var user = await GetUserById(userId);
+
+            if (!string.IsNullOrEmpty(editUserViewModel.BirthDate))
+            {
+                try
+                {
+                    var date = editUserViewModel.BirthDate.SanitizeText().ToMiladi();
+                    user.BirthDate = date;
+                }
+                catch (Exception exeption)
+                {
+                    return EditUserInfoResult.NotValidDate;
+                   
+                }
+            }
+
+            user.FirstName = editUserViewModel.FirstName;
+            user.LastName = editUserViewModel.LastName;
+            user.PhoneNumber = editUserViewModel.PhoneNumber.SanitizeText();
+            user.Description = editUserViewModel.Description.SanitizeText();
+            user.GetNewsLetter = editUserViewModel.GetNewsLetter;
+            user.CountryId = editUserViewModel.CountryId;   
+            user.CityId = editUserViewModel.CityId;
+
+        
+            await _userRepository.UpdateUser(user);
+            await _userRepository.Save();
+
+            return EditUserInfoResult.Success;
+        }
+
+        public async Task<ChangeUserPasswordResult> ChangeUserPassword(long userId, ChangeUserPasswordViewModel changeUserPassword)
+        {
+            var user = await GetUserById(userId);
+
+            var password = PasswordHelper.EncodePasswordMd5(changeUserPassword.OldPassword.SanitizeText());
+
+            if (password != user.Password)
+            {
+                return ChangeUserPasswordResult.OldPasswordNotValid;
+            }
+            user.Password = PasswordHelper.EncodePasswordMd5(changeUserPassword.Password.SanitizeText());
+
+            await _userRepository.UpdateUser(user);
+            await _userRepository.Save();
+
+            return ChangeUserPasswordResult.Success;
         }
         #endregion
 

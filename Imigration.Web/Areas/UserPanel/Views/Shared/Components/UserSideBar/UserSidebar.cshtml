@@ -1,5 +1,5 @@
 ﻿@using Imigration.Application.Extensions
-@using Imigration.Application.Statics;
+@using Imigration.Application.Statics
 @model Imigration.Domains.Entities.Account.User
 
 <!-- right side -->
@@ -13,12 +13,12 @@
         </div>
         <div class="detail gold">
             <h3> @Model.GetUserDisplayName() </h3>
-@*             <span> عضویت : @Model.CreateDate.ToShamsi() </span> *@
+         @*    <span> عضویت : @Model.CreateDate.ToShamsi() </span> *@
         </div>
         <ul>
             <li><a asp-action="Index" asp-controller="Home" asp-area="UserPanel" data-toggle="tooltip" data-placement="top" title=" داشبورد "><i class="icon-settings"></i></a></li>
             <li><a asp-action="EditInfo" asp-controller="Account" asp-area="UserPanel" data-toggle="tooltip" data-placement="top" title=" ویرایش اطلاعات "><i class="icon-profile"></i></a></li>
-            <li><a href="" data-toggle="tooltip" data-placement="top" title=" تغییر رمز عبور "><i class="icon-safe"></i></a></li>
+            <li><a asp-action="changeUserPassword" asp-controller="Account" asp-area="UserPanel" data-toggle="tooltip" data-placement="top" title=" تغییر رمز عبور "><i class="icon-safe"></i></a></li>
             <li><a asp-action="Logout" asp-controller="Account" data-toggle="tooltip" data-placement="top" title=" خروج از حساب "><i class="icon-power-symbol"></i></a></li>
         </ul>
     </div>
@@ -30,6 +30,7 @@
             <ul>
                 <li><a asp-action="Index" asp-controller="Home" asp-area="UserPanel"> داشبورد  </a>  </li>
                 <li><a asp-action="EditInfo" asp-controller="Account" asp-area="UserPanel"> ویرایش اطلاعات کاربری  </a>  </li>
+                <li><a asp-action="changeUserPassword" asp-controller="Account" asp-area="UserPanel"> تغییر کلمه عبور  </a>  </li>
                 <li><a asp-action="Logout" asp-controller="Account"> خروج  </a>  </li>
             </ul>
         </div>

@@ -117,3 +117,11 @@ if (datepickers.length) {
         });
     }
 }
+
+$(function () {
+
+    if ($("#CountryId").val() === '') {
+        $("#CityId").prop("disabled", true);
+    }
+    
+});

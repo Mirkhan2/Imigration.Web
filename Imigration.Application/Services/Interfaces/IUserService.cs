@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Imigration.Domains.Entities.Account;
 using Imigration.Domains.ViewModels.Account;
+using Imigration.Domains.ViewModels.UserPanel.Account;
 
 namespace Imigration.Application.Services.Interfaces
 {
@@ -39,6 +40,10 @@ namespace Imigration.Application.Services.Interfaces
         #region USer Panel
         Task<User?> GetUserById(long userId);
         Task ChangeUserAvatar(long userId, string fileName);
+        Task<EditUserViewModel> FillEditUserViewModel(long userId);
+        Task<EditUserInfoResult> EditUserInfo(EditUserViewModel editUserViewModel, long userId);
+        Task<ChangeUserPasswordResult> ChangeUserPassword(long userId, ChangeUserPasswordViewModel changeUserPasswor);
+     
         #endregion
     }
 }
