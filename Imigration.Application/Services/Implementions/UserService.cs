@@ -95,7 +95,7 @@ namespace Imigration.Application.Services.Implementions
 
 
         #endregion
-
+//Robot Data structure new life
         #region Activation Email
 
         public async Task<bool> ActivateUserEmail(string activationCode)
