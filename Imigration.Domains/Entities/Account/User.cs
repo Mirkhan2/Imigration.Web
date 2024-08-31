@@ -6,6 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Imigration.Domains.Entities.Location;
+using Imigration.Domains.Entities.Questions;
+using Imigration.Domains.Entities.Tags;
+using Imigration.Domains.Enums;
 
 namespace Imigration.Domains.Entities.Account
 {
@@ -52,6 +55,10 @@ namespace Imigration.Domains.Entities.Account
 
         public string EmailActivationCode { get; set; }
 
+        [Display(Name = "مemtiaz  ")]
+        public int Score { get; set; } = 0;
+        [Display(Name = "dalم ")]
+        public UserEnums? Medal { get; set; }
         public string Avatar { get; set; }
         public bool IsDelete { get; set; }
         public long Id { get; set; }
@@ -63,6 +70,12 @@ namespace Imigration.Domains.Entities.Account
         public State?    Country { get; set; }
         [InverseProperty("UserCities")]
         public State? City { get; set; }
+        public ICollection<Question> Questions { get; set; }
+        public ICollection<RequestTag> RequestTags { get; set; }
+        public ICollection<Answer> Answers { get; set; }
+        public ICollection<UserQuestionBookmark> UserQuestionBookmarks { get; set; }
+        public ICollection<QuestionUserScore> QuestionUserScores { get; set; }
+
 
         #endregion
     }

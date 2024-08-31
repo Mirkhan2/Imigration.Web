@@ -4,6 +4,7 @@ using Imigration.DataLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Imigration.DataLayer.Migrations
 {
     [DbContext(typeof(ImigrationDbContext))]
-    partial class ImigrationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240831131013_AddQuestionModels")]
+    partial class AddQuestionModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -235,38 +237,6 @@ namespace Imigration.DataLayer.Migrations
                     b.ToTable("Questions");
                 });
 
-            modelBuilder.Entity("Imigration.Domains.Entities.Questions.QuestionUserScore", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<long>("QuestionId")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("QuestionUserScores");
-                });
-
             modelBuilder.Entity("Imigration.Domains.Entities.Questions.QuestionView", b =>
                 {
                     b.Property<long>("Id")
@@ -464,7 +434,7 @@ namespace Imigration.DataLayer.Migrations
                         .IsRequired();
 
                     b.HasOne("Imigration.Domains.Entities.Account.User", "User")
-                        .WithMany("UserQuestionBookmarks")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -510,25 +480,6 @@ namespace Imigration.DataLayer.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Imigration.Domains.Entities.Questions.QuestionUserScore", b =>
-                {
-                    b.HasOne("Imigration.Domains.Entities.Questions.Question", "Question")
-                        .WithMany("QuestionUserScores")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Imigration.Domains.Entities.Account.User", "User")
-                        .WithMany("QuestionUserScores")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Question");
 
                     b.Navigation("User");
                 });
@@ -582,13 +533,9 @@ namespace Imigration.DataLayer.Migrations
                 {
                     b.Navigation("Answers");
 
-                    b.Navigation("QuestionUserScores");
-
                     b.Navigation("Questions");
 
                     b.Navigation("RequestTags");
-
-                    b.Navigation("UserQuestionBookmarks");
                 });
 
             modelBuilder.Entity("Imigration.Domains.Entities.Location.State", b =>
@@ -601,8 +548,6 @@ namespace Imigration.DataLayer.Migrations
             modelBuilder.Entity("Imigration.Domains.Entities.Questions.Question", b =>
                 {
                     b.Navigation("Answers");
-
-                    b.Navigation("QuestionUserScores");
 
                     b.Navigation("QuestionViews");
 
