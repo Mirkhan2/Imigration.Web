@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
-
+using Imigration.Application.Extensions;
+using Imigration.Application.Statics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Imigration.Web.Controllers
@@ -17,16 +18,28 @@ namespace Imigration.Web.Controllers
         {
             return View();
         }
+        #region Editor Upload
+
+        public async Task<IActionResult> UploadEditorImage(IFormFile upload)
+        {
+            var fileName = Guid.NewGuid() + Path.GetExtension(upload.FileName);
+
+            upload.UploadFile(fileName, PathTools.EditorImageServerPath);
+
+            return Json(new { url = $"{PathTools.EditorImagePath}{fileName}" });
+        }
+
+        #endregion
 
         //public IActionResult Privacy()
         //{
         //    return View();
         //}
 
-    //    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    //    public IActionResult Error()
-    //    {
-    //        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    //    }
+        //    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        //    public IActionResult Error()
+        //    {
+        //        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        //    }
     }
 }

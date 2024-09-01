@@ -117,11 +117,68 @@ if (datepickers.length) {
         });
     }
 }
+var editors = document.querySelectorAll('.editor');
+if (editor.length) {
+    $.getScript("/common/ckeditor/build/ckeditor.js",
+        function (data, textStatus, jqxhr) {
+            classicEditor
+                .create(editor, {
+                    licenseKey: '',
+                    simpleUpload: {
+                        uploadUrl: '/Home/UploadEditorImage'
+                    }
+                })
+                .then(editor => {
+                    window.editor = editor;
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+        }
+        );
+classicEditor.create(editor, {
+        licenseKey: '',
+        simpleUpload: {
+            uploadUrl: '/Home/UploadEditorImage'
+        }
+    })
+    .then(editor => {
+        window.editor = editor;
+    })
+    .catch(error => {
+        console.log(error)
+    });
+
+};
+var magicsuggests = document.querySelectorAll('.magicsuggest');
+if (magicsuggests.length) {
+    $('head').append($(<link rel="stylesheet" type="text/css" />).attr('href', '/common/magicsuggest/magicsuggest.css'));
+    $.getScript("/common/ckeditor/build/ckeditor.js",
+        function (data, textStatus, jqxhr) {
+            for (magic of magicsuggests) {
+                $(`#${magic.id}`).magicsuggests({
+                    data: '/get-tags',
+                    queryPara: 'name',
+                    method: 'Post',
+                    minChars: '2',
+                    placeholder: 'Fill tags please',
+                    style : 'direction : ltr  !importants',
+                    minCharsRenderer: function (c) {
+                        return ' please write 2 character mk';
+                    },
+                    noSuggestionText : '{{name}} no Exit term in website mk',
+
+                });
+            }
+        }
+    );
+
+}
 
 $(function () {
 
     if ($("#CountryId").val() === '') {
         $("#CityId").prop("disabled", true);
     }
-    
+
 });

@@ -10,8 +10,8 @@
 }
 
 @section Header
-	{
-	<partial name="_Header" />
+    {
+    <partial name="_Header" />
 }
 
 <div class="user-page-style">
@@ -36,15 +36,8 @@
                     <header class="top-heading"><h1> <a href="">ثبت پرسش جدید</a> </h1> <span><i>12K</i> پرسش تا بحال ثبت شده است </span></header>
 
                     <div class="inner">
-                        <div class="rules-layer">
-                            <p class="p-style"> لطفا قبل از ثبت پرسش  ، ابتدا موضوع مورد نظر خود را در سایت جستجو نمایید ، در صورتی که پاسخ مورد نظر خود را دریافت نکردید ، به ثبت پرسش اقدام نمایید ، از ثبت پرسش های تکراری جدا خودداری فرمایید </p>
 
-                            <form>
-                                <input type="text" name="" placeholder="پرسش مورد نظر ...">
-                                <button><i class="icon-search"></i></button>
-                            </form>
-
-                        </div>
+                        <partial name="_CreateQuestionSearchBoxPartial" />
 
                         <div class="submit-layer">
                             <p class="p-style"> لطفا قبل از ثبت پرسش قوانین را مطالعه نمایید ، ثبت پرسش شما تایید قوانین محسوب خواهد شد :</p>
@@ -56,29 +49,32 @@
                                 <li> جهت کسب پاسخ صریح ، متن پرسش خود را کاملا واضح ارسال نمایید. </li>
                             </ul>
 
-                            <form class="form-layer-style">
+                            <form class="form-layer-style" asp-action="CreateQuestion" asp-controller="Question">
                                 <div class="row">
+                                    <input type="hidden" id="SelectedTagsJson" name="SelectedTagsJson" value="@Model?.SelectedTagsJson" />
                                     <div class="col-xs-12">
                                         <div class="input-layer">
-                                            <label> <i class="icon-document"></i> عنوان پرسش خود را وارد نمایید </label>
-                                            <input type="text" name="">
+                                            <label asp-for="Title"></label>
+                                            <input type="text" asp-for="Title">
+                                            <span asp-validation-for="Title"></span>
                                         </div>
                                     </div>
                                     <div class="col-xs-12">
                                         <div class="textarea-layer">
-                                            <label class="mb-10"> <i class="icon-document"></i> متن کامل پرسش </label>
-                                            <textarea class="editor"></textarea>
+                                            <label asp-for="Description" class="mb-10"></label>
+                                            <textarea class="editor" asp-for="Description"></textarea>
+                                            <span asp-validation-for="Description"></span>
                                         </div>
                                     </div>
                                     <div class="col-xs-12">
                                         <div class="input-layer">
-                                            <!-- Use YourSelf autocomplete Plugin -->
-                                            <label> <i class="icon-document"></i> تگ های مرتبط با پرسش شما </label>
-                                            <input type="text" name="">
+                                            <label class="mb-8"> <i class="icon-document"></i> تگ های مرتبط با پرسش شما </label>
+                                            <input class="magicsuggest" id="SelectedTags" name="SelectedTags">
                                         </div>
                                     </div>
+
                                     <div class="col-md-3 col-sm-4 col-xs-7 pull-left">
-                                        <button class="submit-button green"> <span>ثبت پرسش</span> </button>
+                                        <button type="submit" class="submit-button green"> <span>ثبت پرسش</span> </button>
                                     </div>
 
                                 </div>
@@ -100,7 +96,30 @@
 </div>
 
 @section Scripts
-	{
-	<partial name="_JqueryValidation" />
-	
+    {
+    <partial name="_JqueryValidation" />
+    <script src="/js/question.js"></script>
+    <script src="/common/magicsuggest/magicsuggest.js"></script>
+    <script>
+        $(function () {
+            var ms = $(`#SelectedTags`).magicSuggest({
+                data: '/get-tags',
+                queryParam: 'name',
+                method: 'get',
+                minChars: 2,
+                placeholder: 'لطفا تگ های مورد نظر خود را وارد کنید',
+                style: 'direction: ltr !important',
+                minCharsRenderer: function (v) {
+                    return 'لطفا حداقل 2 کاراکتر را وارد کنید';
+                },
+                noSuggestionText: '{{name}} وارد شده در پیشنهادات سایت موجود نیست',
+            });
+
+            var jsonValue = $("#SelectedTagsJson").val();
+
+            if (jsonValue !== '') {
+                ms.setValue(JSON.parse(jsonValue));
+            }
+        });
+    </script>
 }

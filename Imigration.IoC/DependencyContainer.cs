@@ -14,7 +14,7 @@ namespace Imigration.IoC
             services.AddScoped<IUserService , UserService>();
             services.AddScoped<IEmailService , EmailService>();
             services.AddScoped<IStateService, StateService>();
-
+            services.AddScoped<IQuestionService , QuestionService>();
 
             #endregion
 
@@ -22,6 +22,7 @@ namespace Imigration.IoC
             services.AddScoped<IUserRepository , UserRepository>();
             services.AddScoped<ISiteSettingRepository, SiteSettingRepository>();
             services.AddScoped<IStateRepository, StateRepository>();
+            services.AddScoped<IQuestionRepository , QuestionRepository>();
 
             #endregion
         }

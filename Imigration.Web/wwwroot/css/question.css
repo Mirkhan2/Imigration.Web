@@ -506,7 +506,7 @@
 .rules-layer{
 	margin-bottom: 45px;
 }
-.rules-layer p{
+.rules-layer .p-style {
 	font-size: 14px;
 	line-height: 26px;
 	text-align: justify;
@@ -544,7 +544,7 @@
 .submit-layer {
 	margin-bottom: 35px
 }
-.submit-layer p{
+.submit-layer .page-style{
 	font-size: 15px;
 	font-weight: bold;
 	line-height: 28px;
@@ -552,7 +552,7 @@
 	position: relative;
 	padding-right: 15px
 }
-.submit-layer p:before{
+.submit-layer .p-style:before{
 	position: absolute;
 	right: 0;
 	top: 9px;

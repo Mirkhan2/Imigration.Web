@@ -23,6 +23,12 @@ namespace Imigration.Application.Statics
         public static readonly string SiteAddress = "https://localhost:44367";
 
         #endregion
+
+        #region CK Editor
+        public static readonly string EditorImageServerPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwrroot/content/ckeditor/");
+        public static readonly string EditorImagePath = "/content/ckeditor";
+
+        #endregion
     }
 
 }

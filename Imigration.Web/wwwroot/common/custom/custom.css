@@ -9,6 +9,14 @@
     margin-top: 50px
 }
 
+.ms-helper {
+    margin-top: 50px !important;
+}
+
+.mb-8 {
+    margin-bottom: 8px !important;
+}
+
 .input-style {
     position: relative !important;
     top: 2px !important;
@@ -27,4 +35,16 @@
 
 .display-none {
     display: none !important;
+}
+
+.ck-label {
+    display: none !important;
+}
+
+.ck-editor__editable {
+    min-height: 300px !important;
+}
+
+.mb-10 {
+    margin-bottom: 10px !important;
 }
