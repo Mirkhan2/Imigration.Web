@@ -4,9 +4,12 @@ using Imigration.Application.Security;
 using Imigration.Application.Services.Interfaces;
 using Imigration.Application.Statics;
 using Imigration.Domains.Entities.Account;
+using Imigration.Domains.Enums;
 using Imigration.Domains.Interfaces;
 using Imigration.Domains.ViewModels.Account;
+using Imigration.Domains.ViewModels.Common;
 using Imigration.Domains.ViewModels.UserPanel.Account;
+using Microsoft.Extensions.Options;
 
 namespace Imigration.Application.Services.Implementions
 {
@@ -15,10 +18,12 @@ namespace Imigration.Application.Services.Implementions
         #region Ctor
         private readonly IUserRepository _userRepository;
         private readonly IEmailService _emailService;
-        public UserService(IUserRepository userRepository, IEmailService emailService)
+        private ScoreManagementViewModel _scoreManagement;
+        public UserService(IUserRepository userRepository, IEmailService emailService, IOptions<ScoreManagementViewModel> scoreManagement)
         {
             _userRepository = userRepository;
             _emailService = emailService;
+            _scoreManagement = scoreManagement.Value;
         }
         #endregion
 
@@ -95,12 +100,12 @@ namespace Imigration.Application.Services.Implementions
 
 
         #endregion
-//Robot Data structure new life
+        //Robot Data structure new life
         #region Activation Email
 
         public async Task<bool> ActivateUserEmail(string activationCode)
         {
-            var user = await _userRepository.GetUserByActivationCode(activationCode);   
+            var user = await _userRepository.GetUserByActivationCode(activationCode);
 
             if (user == null) return false;
 
@@ -108,7 +113,7 @@ namespace Imigration.Application.Services.Implementions
 
             user.IsEmailConfirmed = true;
             user.EmailActivationCode = CodeGenerator.CreateActivationCode();
-             await _userRepository.UpdateUser(user);
+            await _userRepository.UpdateUser(user);
             await _userRepository.Save();
 
             return true;
@@ -158,7 +163,7 @@ namespace Imigration.Application.Services.Implementions
 
             var password = PasswordHelper.EncodePasswordMd5(resetPassword.Password.SanitizeText());
 
-            user.Password = password;   
+            user.Password = password;
 
             user.IsEmailConfirmed = true;
             user.EmailActivationCode = CodeGenerator.CreateActivationCode();
@@ -168,7 +173,7 @@ namespace Imigration.Application.Services.Implementions
 
             return ResetPasswordResult.Success;
 
-            
+
         }
 
         public async Task<User> GetUserByActivationCode(string activationCode)
@@ -197,7 +202,7 @@ namespace Imigration.Application.Services.Implementions
 
         public async Task<EditUserViewModel> FillEditUserViewModel(long userId)
         {
-                var user = await _userRepository.GetUserById(userId);
+            var user = await _userRepository.GetUserById(userId);
 
             var result = new EditUserViewModel()
             {
@@ -211,7 +216,7 @@ namespace Imigration.Application.Services.Implementions
                 PhoneNumber = user.PhoneNumber,
             };
             return result;
-        
+
         }
 
         public async Task<EditUserInfoResult> EditUserInfo(EditUserViewModel editUserViewModel, long userId)
@@ -228,7 +233,7 @@ namespace Imigration.Application.Services.Implementions
                 catch (Exception exeption)
                 {
                     return EditUserInfoResult.NotValidDate;
-                   
+
                 }
             }
 
@@ -237,10 +242,10 @@ namespace Imigration.Application.Services.Implementions
             user.PhoneNumber = editUserViewModel.PhoneNumber.SanitizeText();
             user.Description = editUserViewModel.Description.SanitizeText();
             user.GetNewsLetter = editUserViewModel.GetNewsLetter;
-            user.CountryId = editUserViewModel.CountryId;   
+            user.CountryId = editUserViewModel.CountryId;
             user.CityId = editUserViewModel.CityId;
 
-        
+
             await _userRepository.UpdateUser(user);
             await _userRepository.Save();
 
@@ -266,5 +271,57 @@ namespace Imigration.Application.Services.Implementions
         }
         #endregion
 
+        #region User Question
+
+        public async Task UpdateUserScoreAndMedal(long userId, int score)
+        {
+            var user = await GetUserById(userId);
+
+            if (user == null) return;
+
+            user.Score += score;
+
+            await _userRepository.UpdateUser(user);
+            await _userRepository.Save();
+
+            if (user.Score >= _scoreManagement.MinScoreForBronzeMedal && user.Score < _scoreManagement.MinScoreForSilverMedal)
+            {
+                if (user.Medal != null && user.Medal == UserMedal.Bronze)
+                {
+                    return;
+                }
+
+                user.Medal = UserMedal.Bronze;
+
+                await _userRepository.UpdateUser(user);
+                await _userRepository.Save();
+            }
+            else if (user.Score >= _scoreManagement.MinScoreForSilverMedal && user.Score < _scoreManagement.MinScoreForGoldMedal)
+            {
+                if (user.Medal != null && user.Medal == UserMedal.Silver)
+                {
+                    return;
+                }
+
+                user.Medal = UserMedal.Silver;
+
+                await _userRepository.UpdateUser(user);
+                await _userRepository.Save();
+            }
+            else if (user.Score >= _scoreManagement.MinScoreForGoldMedal)
+            {
+                if (user.Medal != null && user.Medal == UserMedal.Gold)
+                {
+                    return;
+                }
+
+                user.Medal = UserMedal.Gold;
+
+                await _userRepository.UpdateUser(user);
+                await _userRepository.Save();
+            }
+        }
+
+        #endregion
     }
 }

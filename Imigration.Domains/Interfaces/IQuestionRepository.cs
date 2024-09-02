@@ -12,8 +12,23 @@ namespace Imigration.Domains.Interfaces
     {
         #region Tag
         Task<List<Tag>> GetAllTags();
+        Task<bool> IsExitTagByName(string name);
+        Task<Tag> GetTagByName(string name);
+        Task<bool> CheckUserRequestForTag(long userId, string tag);
+        Task AddRequestTag(RequestTag tag);
+        Task SaveChanges();
+        Task<int> RequestCountForTag(string tag);
+        Task AddTag(Tag tag);
+
         #endregion
 
+        #region Question
+        Task AddQuestion(Question question);
+
+        #endregion
+        #region Selected Tad
+        Task AddSelectedQuestionTag(SelectQuestionTag selectQuestionTag);
+        #endregion
         //Task DeleteQuestion(int id );
         //Task<Question> GetQuestionById(long id);
         //Task<Question> GetAnswerByid(long id);

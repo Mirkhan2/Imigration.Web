@@ -1,12 +1,17 @@
-﻿
+﻿@model Imigration.Domains.ViewModels.Question.CreateQuestionViewModel
+
 @{
-	ViewData["Title"] = "submit new QUestion";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "ثبت پرسش جدید";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
 @section Styles
-	{
+    {
+    <link rel="stylesheet" type="text/css" href="/css/form.css">
+    <link rel="stylesheet" type="text/css" href="/css/page.css">
+    <link rel="stylesheet" type="text/css" href="/css/question.css">
+    <link rel="stylesheet" type="text/css" href="/common/magicsuggest/magicsuggest.css">
 }
 
 @section Header

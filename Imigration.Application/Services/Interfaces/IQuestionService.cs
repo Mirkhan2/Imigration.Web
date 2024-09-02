@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Imigration.Domains.Entities.Tags;
+using Imigration.Domains.ViewModels.Question;
 
 namespace Imigration.Application.Services.Interfaces
 {
@@ -11,6 +12,12 @@ namespace Imigration.Application.Services.Interfaces
     {
         #region Tags
         Task<List<Tag>> GetAllTags();
+
+        Task<CreateQuestionResult> CheckTagValidation(List<string>? tags , long userId);
+
+        Task<bool> CreateQuestion(CreateQuestionViewModel createQuestion);
+
+        
         #endregion
     }
 }

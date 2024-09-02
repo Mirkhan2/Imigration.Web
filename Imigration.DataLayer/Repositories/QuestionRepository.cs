@@ -20,6 +20,8 @@ namespace Imigration.DataLayer.Repositories
             _context = context;
         }
 
+     
+
         #endregion
 
 
@@ -30,7 +32,58 @@ namespace Imigration.DataLayer.Repositories
             return await _context.Tags.Where(s => !s.IsDelete).ToListAsync();
         }
 
-        #endregion
+        public async Task<bool> IsExitTagByName(string name)
+        {
+            return await _context.Tags.AnyAsync(s => s.Title.Equals(name)&& !s.IsDelete);
+        }
+        public async Task<bool> CheckUserRequestForTag(long userId, string tag)
+        {
+           return await  _context.RequestTags.AnyAsync(s => s.UserId == userId && s.Title.Equals(tag) && !s.IsDelete );
+        }
 
+        public async Task AddRequestTag(RequestTag tag)
+        {
+           await _context.RequestTags.AddAsync(tag);
+        }
+
+        public async Task SaveChanges()
+        {   
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<int> RequestCountForTag(string tag)
+        {
+            return await _context.RequestTags.CountAsync(s => !s.IsDelete && s.Title.Equals(tag));
+        }
+
+
+        public async Task AddTag(Tag tag)
+        {
+            await _context.Tags.AddAsync(tag);
+        }
+
+        public async Task<Tag> GetTagByName(string name)
+        {
+            return await _context.Tags.FirstOrDefaultAsync(s => !s.IsDelete && s.Title.Equals(name));
+        }
+
+
+        #endregion
+        #region Question
+
+        public async Task AddQuestion(Question question)
+        {
+            await _context.Questions.AddAsync(question);
+        }
+
+        #endregion
+        #region SelectedQUestion Tag
+
+        public async Task AddSelectedQuestionTag(SelectQuestionTag selectQuestionTag)
+        {
+            await _context.AddAsync(selectQuestionTag);
+        }
+
+        #endregion
     }
 }

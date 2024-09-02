@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Imigration.Domains.Enums
 {
-    public enum UserEnums
+    public enum UserMedal   
     {
 
         [Display(Name = "برنز")] Bronze,

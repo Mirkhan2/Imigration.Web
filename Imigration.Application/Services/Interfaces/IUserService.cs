@@ -43,7 +43,12 @@ namespace Imigration.Application.Services.Interfaces
         Task<EditUserViewModel> FillEditUserViewModel(long userId);
         Task<EditUserInfoResult> EditUserInfo(EditUserViewModel editUserViewModel, long userId);
         Task<ChangeUserPasswordResult> ChangeUserPassword(long userId, ChangeUserPasswordViewModel changeUserPasswor);
-     
+
+        #endregion
+        #region User Question
+
+        Task UpdateUserScoreAndMedal(long userId, int score);
+
         #endregion
     }
 }

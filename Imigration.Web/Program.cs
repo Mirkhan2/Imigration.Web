@@ -3,9 +3,11 @@ using System.Text.Unicode;
 using GoogleReCaptcha.V3;
 using GoogleReCaptcha.V3.Interface;
 using Imigration.DataLayer.Context;
+using Imigration.Domains.ViewModels.Common;
 using Imigration.IoC;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
+builder.Services.Configure<ScoreManagementViewModel>(builder.Configuration.GetSection("ScoreManagment"));
 
 #region DbContext
 
