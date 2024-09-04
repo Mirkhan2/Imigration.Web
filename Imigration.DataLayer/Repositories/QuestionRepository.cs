@@ -76,6 +76,12 @@ namespace Imigration.DataLayer.Repositories
             await _context.Questions.AddAsync(question);
         }
 
+        public async Task<IQueryable<Question>> GetAllQuestions()
+        {
+            return  _context.Questions.Where
+                (s => !s.IsDelete).AsQueryable();
+        }
+
         #endregion
         #region SelectedQUestion Tag
 
@@ -83,6 +89,7 @@ namespace Imigration.DataLayer.Repositories
         {
             await _context.AddAsync(selectQuestionTag);
         }
+
 
         #endregion
     }

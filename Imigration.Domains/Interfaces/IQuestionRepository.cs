@@ -24,9 +24,10 @@ namespace Imigration.Domains.Interfaces
 
         #region Question
         Task AddQuestion(Question question);
+        Task<IQueryable<Question>> GetAllQuestions();
 
         #endregion
-        #region Selected Tad
+        #region Selected Tag
         Task AddSelectedQuestionTag(SelectQuestionTag selectQuestionTag);
         #endregion
         //Task DeleteQuestion(int id );

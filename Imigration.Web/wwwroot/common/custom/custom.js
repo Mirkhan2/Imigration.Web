@@ -158,3 +158,10 @@ $(function () {
     }
 
 });
+function SubmitQuestionForm() {
+    $("#filter_form").submit();
+}
+function SubmitFilterFormPagination(pageId) {
+    $("#CurrenPage").val(pageId);
+    $("#filter_form").submit();
+}

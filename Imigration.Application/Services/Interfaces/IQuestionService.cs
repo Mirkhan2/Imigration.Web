@@ -17,7 +17,11 @@ namespace Imigration.Application.Services.Interfaces
 
         Task<bool> CreateQuestion(CreateQuestionViewModel createQuestion);
 
-        
+
+        #endregion
+
+        #region QUestions
+        Task<FilterQuestionViewModel> FilterQuestions(FilterQuestionViewModel filter);
         #endregion
     }
 }

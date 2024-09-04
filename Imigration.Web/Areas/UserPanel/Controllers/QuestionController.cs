@@ -1,4 +1,5 @@
 ﻿using Imigration.Application.Extensions;
+using Imigration.Application.Security;
 using Imigration.Application.Services.Interfaces;
 using Imigration.Domains.ViewModels.Question;
 using Imigration.Web.Controllers;
@@ -79,6 +80,38 @@ namespace Imigration.Web.Areas.UserPanel.Controllers
             return Json(filteredTags);
         }
 
+        #endregion
+
+        #region Question List
+
+        [HttpGet("questions")]
+        public async Task<IActionResult> QuestionList(FilterQuestionViewModel filter)
+        {
+            filter.TakeEntity = 1;
+
+            var result = await _questionService.FilterQuestions(filter);
+
+            return View(result);
+        }
+
+        #endregion
+
+        #region Filter Question ByTag
+
+        [HttpGet("tags/{tagName}")]
+        public async Task<IActionResult> QuestionListBtTag(FilterQuestionViewModel filter , string tagName)
+        {
+            tagName = tagName.Trim().ToLower().SanitizeText();
+            filter.TagTitle = tagName;
+
+            filter.TakeEntity = 1;
+
+            var result = await _questionService.FilterQuestions(filter);
+
+            ViewBag.TagTitle = tagName;
+
+            return View(result);
+        }
         #endregion
     }
 }

@@ -55,10 +55,13 @@ namespace Imigration.Domains.Entities.Account
 
         public string EmailActivationCode { get; set; }
 
-        [Display(Name = "مemtiaz  ")]
+
+        [Display(Name = "امتیاز")]
         public int Score { get; set; } = 0;
-        [Display(Name = "dalم ")]
-        public UserEnums? Medal { get; set; }
+
+        [Display(Name = "مدال")]
+        public UserMedal? Medal { get; set; }
+
         public string Avatar { get; set; }
         public bool IsDelete { get; set; }
         public long Id { get; set; }

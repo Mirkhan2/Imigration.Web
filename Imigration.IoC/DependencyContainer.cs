@@ -11,18 +11,20 @@ namespace Imigration.IoC
         public static void RegisterDependencies(IServiceCollection services)
         {
             #region Services
-            services.AddScoped<IUserService , UserService>();
-            services.AddScoped<IEmailService , EmailService>();
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IStateService, StateService>();
-            services.AddScoped<IQuestionService , QuestionService>();
+            services.AddScoped<IQuestionService, QuestionService>();
 
             #endregion
 
             #region Repositories
-            services.AddScoped<IUserRepository , UserRepository>();
+
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ISiteSettingRepository, SiteSettingRepository>();
             services.AddScoped<IStateRepository, StateRepository>();
-            services.AddScoped<IQuestionRepository , QuestionRepository>();
+            services.AddScoped<IQuestionRepository, QuestionRepository>();
 
             #endregion
         }

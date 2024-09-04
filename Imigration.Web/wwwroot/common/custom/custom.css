@@ -16,6 +16,10 @@
 .mb-8 {
     margin-bottom: 8px !important;
 }
+.current {
+    color : green !important;
+    border :green 1px solid !important;
+}
 
 .input-style {
     position: relative !important;
