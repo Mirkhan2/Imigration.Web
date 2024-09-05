@@ -117,39 +117,31 @@ if (datepickers.length) {
         });
     }
 }
-var editors = document.querySelectorAll('.editor');
-if (editor.length) {
+
+var editorsArray = [];
+var editors = document.querySelectorAll(".editor");
+if (editors.length) {
     $.getScript("/common/ckeditor/build/ckeditor.js",
         function (data, textStatus, jqxhr) {
-            classicEditor
-                .create(editor, {
-                    licenseKey: '',
-                    simpleUpload: {
-                        uploadUrl: '/Home/UploadEditorImage'
-                    }
-                })
-                .then(editor => {
-                    window.editor = editor;
-                })
-                .catch(error => {
-                    console.log(error)
-                });
-        }
-        );
-classicEditor.create(editor, {
-        licenseKey: '',
-        simpleUpload: {
-            uploadUrl: '/Home/UploadEditorImage'
-        }
-    })
-    .then(editor => {
-        window.editor = editor;
-    })
-    .catch(error => {
-        console.log(error)
-    });
-
-};
+            for (editor of editors) {
+                ClassicEditor
+                    .create(editor,
+                        {
+                            licenseKey: '',
+                            simpleUpload: {
+                                uploadUrl: '/Home/UploadEditorImage'
+                            }
+                        })
+                    .then(editor => {
+                        window.editor = editor;
+                        editorsArray.push(editor);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            }
+        });
+}
 
 $(function () {
 
@@ -158,10 +150,40 @@ $(function () {
     }
 
 });
+
 function SubmitQuestionForm() {
     $("#filter_form").submit();
 }
-function SubmitFilterFormPagination(pageId) {
-    $("#CurrenPage").val(pageId);
+
+function SubmitTagForm() {
     $("#filter_form").submit();
+}
+
+function SubmitFilterFormPagination(pageId) {
+    $("#CurrentPage").val(pageId);
+    $("#filter_form").submit();
+}
+
+function AnswerQuestionFormDone(response) {
+    EndLoading('#submit-comment');
+
+    if (response.status === "Success") {
+        swal("اعلان", "پاسخ شما با موفقیت ثبت شد .", "success");
+
+        $("#AnswersBox").load(location.href + " #AnswersBox");
+
+        $('html, body').animate({
+            scrollTop: $("#AnswersBox").offset().top
+        }, 1000);
+    }
+    else if (response.status === "EmptyAnswer") {
+        swal("هشدار", "متن پاسخ شما نمی تواند خالی  باشد .", "warning");
+    }
+    else if (response.status === "Error") {
+        swal("خطا", "خطایی رخ داده است لطفا مجدد تلاش کنید .", "error");
+    }
+
+    for (var editor of editorsArray) {
+        editor.setData('');
+    }
 }

@@ -99,19 +99,52 @@ namespace Imigration.Web.Areas.UserPanel.Controllers
         #region Filter Question ByTag
 
         [HttpGet("tags/{tagName}")]
-        public async Task<IActionResult> QuestionListBtTag(FilterQuestionViewModel filter , string tagName)
+        public async Task<IActionResult> FilterTags(FilterTagViewModel filter)
         {
-            tagName = tagName.Trim().ToLower().SanitizeText();
-            filter.TagTitle = tagName;
+           
+            var result = await _questionService.FilterTags(filter);
 
-            filter.TakeEntity = 1;
-
-            var result = await _questionService.FilterQuestions(filter);
-
-            ViewBag.TagTitle = tagName;
+            
 
             return View(result);
         }
         #endregion
+
+        #region Question detial
+
+        [HttpGet("question/{questionId}")]
+        public async Task<IActionResult> QuestionDetail(long  questionId)
+        {
+            var question = await _questionService.GetQUestionById(questionId);
+
+            if (question == null) return NotFound();
+
+            ViewData["TageList"] = _questionService.GetTagListByQuestionId(question.Id);
+         
+                return View(question);
+        }
+        [HttpPost]
+        [Authorize]
+        public  async Task<IActionResult> AnwerQuestion(AnswerQuestionViewModel answerQuestion)
+        {
+            if (string.IsNullOrEmpty(answerQuestion.Answer))
+            {
+                return new JsonResult(new { status = "EmptyAnswer" });
+            }
+            answerQuestion.UserId = User.GetUserId();
+
+            var result = await _questionService.AnwerQuestion(answerQuestion);
+            if (result)
+            {
+                return new JsonResult(new
+                {
+                    status = "Success"
+                });
+            }
+            return new JsonResult(new {status = "Error"});
+
+        }
+        #endregion
+
     }
 }

@@ -43,7 +43,7 @@
                     <div class="top-layer">
                         <div class="search-layer">
                             <input type="text" asp-for="Title" placeholder="دنبال چه سوالی میگردی ؟ ">
-                            <button type="su"><i class="icon-search"></i></button>
+                            <button type="submit"><i class="icon-search"></i></button>
                         </div>
                         <div class="filter-layer">
                             <div class="select-layer">
@@ -74,7 +74,7 @@
 
                                 <!-- item -->
                                 <article class="@className">
-                                    <h2><a href="javascript:void(0)">@question.Title</a></h2>
+                                    <h2><a asp-action="QuestionDetail" asp-controller="Question" asp-route-questionId="@question.QuestionId">@question.Title</a></h2>
                                     <span> @question.AnswersCount <i class="icon-comment-1"></i> </span>
                                     <ul>
                                         <li> پرسیده شده توسط <a href="javascript:void(0)"> @question.UserDisplayName </a> @question.CreateDate </li>

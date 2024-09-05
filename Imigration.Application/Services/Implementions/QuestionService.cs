@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using Imigration.Application.Extensions;
 using Imigration.Application.Security;
 using Imigration.Application.Services.Interfaces;
@@ -39,6 +35,10 @@ namespace Imigration.Application.Services.Implementions
 
         #region Tags
 
+        public async Task<List<string>> GetTagListByQuestionId(long questionId)
+        {
+            return await _questionRepository.GetTagListByQuestionId(questionId);
+        }
         public async Task<List<Tag>> GetAllTags()
         {
             //var minCOunt = _scoreManagement.MinRequestsCountForVerifyTag;
@@ -124,9 +124,11 @@ namespace Imigration.Application.Services.Implementions
             {
                 foreach (var questionSelectedTag in createQuestion.SelectedTags)
                 {
-                    var tag = _questionRepository.GetTagByName(questionSelectedTag.SanitizeText().Trim().ToLower());
+                    var tag =  await _questionRepository.GetTagByName(questionSelectedTag.SanitizeText().Trim().ToLower());
                     if (tag == null) continue;
 
+                    tag.UseCount += 1;
+                    await _questionRepository.UpdateTag(tag);
 
 
 
@@ -147,7 +149,35 @@ namespace Imigration.Application.Services.Implementions
 
             return true;
         }
+        public async Task<FilterTagViewModel> FilterTags(FilterTagViewModel filter)
+        {
+           var query =  await _questionRepository.GetAllTagsAsQueryable();
 
+            if (!string.IsNullOrEmpty(filter.Title))
+            {
+                query = query.Where(s => s.Title.Contains(filter.Title));
+            }
+            switch (filter.Sort)
+            {
+                case FilterTagEnum.NewToOld:
+                    query = query.OrderByDescending(s => s.CreateDate);
+                    break;
+                case FilterTagEnum.OldToNew:
+                    query = query.OrderBy(s => s.CreateDate);
+                    break;
+                case FilterTagEnum.UserCountHighToLow:
+                    query = query.OrderByDescending(s => s.UseCount);
+                    break;
+                case FilterTagEnum.UseCountLOwToHigh:
+                    query = query.OrderBy(s => s.UseCount);
+
+                    break;
+                    
+            }
+            await filter.SetPaging(query);
+
+            return filter;
+        }
 
 
         #endregion
@@ -216,6 +246,42 @@ namespace Imigration.Application.Services.Implementions
             await filter.SetPaging(result);
 
             return filter;
+        }
+]
+
+        public async Task<Question> GetQUestionById(long id)
+        {
+          return await _questionRepository.GetQUestionById(id);
+        }
+
+        public Task<IQueryable<Tag>> GetAllTagsAsQueryable()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> AnwerQuestion(AnswerQuestionViewModel answerQuestion)
+        {
+            var question = await GetQUestionById(answerQuestion.QuestionId);
+
+            if (question == null) return false;
+            
+
+            var answer = new Answer()
+            {
+                Content = answerQuestion.Answer.SanitizeText(),
+                QuestionId = answerQuestion.QuestionId,
+                UserId = answerQuestion.UserId,
+
+            };
+            await _questionRepository.AddAnswer(answer);
+            await _questionRepository.SaveChanges();
+
+            return true;
+        }
+
+        public async Task<List<Answer>> GetAllQuestionAnswers(long questionId)
+        {
+            return await _questionRepository.GetAllQuestionAnswers(questionId);
         }
     }
 

@@ -13,6 +13,7 @@ namespace Imigration.Domains.ViewModels.Common
             CurrentPage = 1;
             HowManyShowBeforeAfter = 3;
             TakeEntity = 10;
+
             Entities = new List<T>();
         }
 
@@ -63,8 +64,12 @@ namespace Imigration.Domains.ViewModels.Common
             EndPage = CurrentPage + HowManyShowBeforeAfter > TotalPage
                 ? TotalPage
                 : CurrentPage + HowManyShowBeforeAfter;
+            if (query.Any())
+            {
+                Entities = query.Skip(SkipEntity).Take(TakeEntity).ToList();
 
-            Entities =  query.Skip(SkipEntity).Take(TakeEntity).ToList();
+
+            }
         }
     }
 

@@ -12,27 +12,35 @@ namespace Imigration.Domains.Interfaces
     {
         #region Tag
         Task<List<Tag>> GetAllTags();
+        Task<IQueryable<Tag>> GetAllTagsAsQueryable();
         Task<bool> IsExitTagByName(string name);
         Task<Tag> GetTagByName(string name);
         Task<bool> CheckUserRequestForTag(long userId, string tag);
         Task AddRequestTag(RequestTag tag);
         Task SaveChanges();
         Task<int> RequestCountForTag(string tag);
+        Task<List<string>> GetTagListByQuestionId(long questionId); 
         Task AddTag(Tag tag);
+        Task UpdateTag(Tag tag);
 
         #endregion
 
         #region Question
         Task AddQuestion(Question question);
         Task<IQueryable<Question>> GetAllQuestions();
+        Task<Question> GetQUestionById(long id);    
 
         #endregion
+
         #region Selected Tag
         Task AddSelectedQuestionTag(SelectQuestionTag selectQuestionTag);
         #endregion
-        //Task DeleteQuestion(int id );
-        //Task<Question> GetQuestionById(long id);
-        //Task<Question> GetAnswerByid(long id);
-        //Task<Question> GetQuestionType(string Question);
+
+        #region Answer
+
+        Task AddAnswer(Answer answer);
+        Task<List<Answer>> GetAllQuestionAnswers(long questionId );
+
+        #endregion
     }
 }
