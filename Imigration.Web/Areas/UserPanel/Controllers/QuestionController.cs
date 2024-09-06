@@ -119,10 +119,31 @@ namespace Imigration.Web.Areas.UserPanel.Controllers
 
             if (question == null) return NotFound();
 
+            var userIp = Request.HttpContext.Connection.RemoteIpAddress;
+
+            if (userIp != null) {
+
+                await _questionService.AddViewFormQuestion(userIp.ToString(), question);
+
+            }
+   
+
             ViewData["TageList"] = _questionService.GetTagListByQuestionId(question.Id);
          
                 return View(question);
         }
+
+
+        [HttpGet("question/{questionId}")]
+        public async Task<IActionResult> QuestionDetailByShortLink(long questionId)
+        {
+            var question = await _questionService.GetQUestionById(questionId);
+
+            if (question == null) return NotFound();
+
+            return RedirectToAction("QuestionDetail", "Question", new { questionId = questionId });
+        }
+
         [HttpPost]
         [Authorize]
         public  async Task<IActionResult> AnwerQuestion(AnswerQuestionViewModel answerQuestion)
@@ -144,6 +165,25 @@ namespace Imigration.Web.Areas.UserPanel.Controllers
             return new JsonResult(new {status = "Error"});
 
         }
+        #endregion
+
+        #region select True Answer
+
+        [HttpPost("SelectTrueAnswer")]
+        public  async Task<IActionResult> SelectTrueAnswer(long answerId)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return new JsonResult(new { status = " NOAuthorize" });
+            }
+            if (await _questionService.HasYserAccessToSelectTrueAnswer(User.GetUserId(), answerId))
+            {
+                return new JsonResult(new { status = " NOtAccess" });
+            }
+            await _questionService.SelectTrueAnswer(User.GetUserId(),answerId);
+            return new JsonResult(new { status = " SUCCESS" });
+        }
+
         #endregion
 
     }

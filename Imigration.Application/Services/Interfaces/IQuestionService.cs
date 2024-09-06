@@ -31,10 +31,14 @@ namespace Imigration.Application.Services.Interfaces
         Task<Question> GetQUestionById(long id);
 
         Task<bool> AnwerQuestion(AnswerQuestionViewModel answerQuestion);
+        Task AddViewFormQuestion(string userIp, Question question);
 
         #endregion
         #region Answwer
         Task<List<Answer>> GetAllQuestionAnswers(long questionId);
+        Task<bool> HasYserAccessToSelectTrueAnswer(long userId,long answerId);
+
+        Task SelectTrueAnswer(long userid , long answerId);
         #endregion
     }
 }

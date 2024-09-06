@@ -84,6 +84,7 @@ namespace Imigration.DataLayer.Repositories
 
         #endregion
 
+
         #region Question
 
         public async Task AddQuestion(Question question)
@@ -97,7 +98,14 @@ namespace Imigration.DataLayer.Repositories
                 (s => !s.IsDelete).AsQueryable();
         }
 
+        public async Task UpdateQuestion(Question question)
+        {
+            _context.Questions.Update(question);
+        }
+
+
         #endregion
+
 
         #region SelectedQUestion Tag
 
@@ -115,6 +123,21 @@ namespace Imigration.DataLayer.Repositories
 
 
         #endregion
+
+        #region View
+
+        public async Task<bool> IsExistsViewForQuestion(string userIp, long questionId)
+        {
+            return await _context.QuestionViews.AnyAsync(s => s.UserIP.Equals(userIp) && s.QuestionId == questionId);
+        }
+
+        public async Task AddQuestionView(QuestionView view)
+        {
+            await _context.QuestionViews.AddAsync(view);
+
+        }
+        #endregion
+
         #region Answer
 
 
@@ -132,6 +155,18 @@ namespace Imigration.DataLayer.Repositories
             != questionId && !s.IsDelete).ToListAsync();
         }
 
+        public async Task<Answer?> GetAnswerById(long id)
+        {
+            return await _context.Answers.Include(s => s.Question).FirstOrDefaultAsync(s => s.Id == id && !s.IsDelete);
+        }
+
+        public async Task UpdateAnswer(Answer answer)
+        {
+            _context.Answers.Update(answer);
+        }
+
+
         #endregion
+
     }
 }

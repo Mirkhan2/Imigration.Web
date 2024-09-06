@@ -11,6 +11,7 @@ namespace Imigration.Domains.ViewModels.Common
         public int MinRequestsCountForVerifyTag { get; set; }
 
         public int AddNewQuestionScrore { get; set; }
+        public int AddNewAnswerScrore { get; set; }
 
         public int MinScoreForBronzeMedal { get; set; }
   

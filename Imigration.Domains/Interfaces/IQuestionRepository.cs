@@ -27,8 +27,19 @@ namespace Imigration.Domains.Interfaces
 
         #region Question
         Task AddQuestion(Question question);
+        Task UpdateQuestion(Question question);
         Task<IQueryable<Question>> GetAllQuestions();
         Task<Question> GetQUestionById(long id);    
+        Task<bool> IsExistsViewForQuestion( string userIp, long questionId );
+
+
+
+        #endregion
+
+        #region View
+
+        Task<bool> IsExistsViewForQuestion(string userIp, long questionId);
+        Task AddQuestionView(QuestionView view);
 
         #endregion
 
@@ -39,7 +50,9 @@ namespace Imigration.Domains.Interfaces
         #region Answer
 
         Task AddAnswer(Answer answer);
+        Task UpdateAnswer(Answer answer);
         Task<List<Answer>> GetAllQuestionAnswers(long questionId );
+        Task<Answer?> GetAnswerById(long id);
 
         #endregion
     }

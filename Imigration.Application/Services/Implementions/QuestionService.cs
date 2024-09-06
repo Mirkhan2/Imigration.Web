@@ -2,6 +2,7 @@
 using Imigration.Application.Extensions;
 using Imigration.Application.Security;
 using Imigration.Application.Services.Interfaces;
+using Imigration.DataLayer.Repositories;
 using Imigration.Domains.Entities.Account;
 using Imigration.Domains.Entities.Questions;
 using Imigration.Domains.Entities.Tags;
@@ -124,7 +125,7 @@ namespace Imigration.Application.Services.Implementions
             {
                 foreach (var questionSelectedTag in createQuestion.SelectedTags)
                 {
-                    var tag =  await _questionRepository.GetTagByName(questionSelectedTag.SanitizeText().Trim().ToLower());
+                    var tag = await _questionRepository.GetTagByName(questionSelectedTag.SanitizeText().Trim().ToLower());
                     if (tag == null) continue;
 
                     tag.UseCount += 1;
@@ -151,7 +152,7 @@ namespace Imigration.Application.Services.Implementions
         }
         public async Task<FilterTagViewModel> FilterTags(FilterTagViewModel filter)
         {
-           var query =  await _questionRepository.GetAllTagsAsQueryable();
+            var query = await _questionRepository.GetAllTagsAsQueryable();
 
             if (!string.IsNullOrEmpty(filter.Title))
             {
@@ -172,7 +173,7 @@ namespace Imigration.Application.Services.Implementions
                     query = query.OrderBy(s => s.UseCount);
 
                     break;
-                    
+
             }
             await filter.SetPaging(query);
 
@@ -193,9 +194,9 @@ namespace Imigration.Application.Services.Implementions
             if (!string.IsNullOrEmpty(filter.TagTitle))
             {
 
-                   query = query.Include(s => s.SelectQuestionTags)
-                    .ThenInclude(s => s.Tag)
-                    .Where(s => s.SelectQuestionTags.Any(a => a.Tag.Title.Equals(filter.TagTitle)));
+                query = query.Include(s => s.SelectQuestionTags)
+                 .ThenInclude(s => s.Tag)
+                 .Where(s => s.SelectQuestionTags.Any(a => a.Tag.Title.Equals(filter.TagTitle)));
 
             }
 
@@ -247,11 +248,11 @@ namespace Imigration.Application.Services.Implementions
 
             return filter;
         }
-]
+
 
         public async Task<Question> GetQUestionById(long id)
         {
-          return await _questionRepository.GetQUestionById(id);
+            return await _questionRepository.GetQUestionById(id);
         }
 
         public Task<IQueryable<Tag>> GetAllTagsAsQueryable()
@@ -264,7 +265,7 @@ namespace Imigration.Application.Services.Implementions
             var question = await GetQUestionById(answerQuestion.QuestionId);
 
             if (question == null) return false;
-            
+
 
             var answer = new Answer()
             {
@@ -276,6 +277,8 @@ namespace Imigration.Application.Services.Implementions
             await _questionRepository.AddAnswer(answer);
             await _questionRepository.SaveChanges();
 
+          await  _userService.UpdateUserScoreAndMedal(answerQuestion.UserId, _scoreManagement.AddNewQuestionScrore);
+
             return true;
         }
 
@@ -283,7 +286,61 @@ namespace Imigration.Application.Services.Implementions
         {
             return await _questionRepository.GetAllQuestionAnswers(questionId);
         }
+
+        public async Task AddViewFormQuestion(string userIp, Question question)
+        {
+            if (await _questionRepository.IsExistsViewForQuestion(userIp, question.Id))
+            {
+                return;
+            }
+            var view = new QuestionView()
+            {
+                QuestionId = question.Id,
+                UserIP = userIp
+            };
+
+            await _questionRepository.AddQuestionView(view);
+
+
+            question.ViewCount += 1;
+
+            await _questionRepository.UpdateQuestion(question);
+            await _questionRepository.SaveChanges();
+        }
+
+        public async Task<bool> HasYserAccessToSelectTrueAnswer(long userId, long answerId)
+        {
+            var answer = await _questionRepository.GetAnswerById(answerId);
+
+            if (answer == null) return false;
+            
+            var user = await _userService.GetUserById(userId);
+
+            if (user == null) return false;
+
+            if (user.IsAdmin) return true;
+
+            if (answer.Question.UserId != userId)
+            {
+                return false;
+            }
+
+             return true;
+
+            
+        }
+
+        public async Task SelectTrueAnswer(long userid, long answerId)
+        {
+            var answer = await _questionRepository.GetAnswerById(answerId);
+
+            answer.IsTrue = !answer.IsTrue;
+
+            await _questionRepository.UpdateAnswer(answer);
+           await _questionRepository.SaveChanges();
+
+        }
     }
 
-        #endregion
-  }
+    #endregion
+}

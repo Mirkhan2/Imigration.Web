@@ -187,3 +187,122 @@ function AnswerQuestionFormDone(response) {
         editor.setData('');
     }
 }
+function ScoreDownForQuestion(questionId) {
+    $.ajax({
+        url: "/ScoreDownForQuestion",
+        type: "post",
+        data: {
+            questionId: questionId
+        },
+        beforeSend: function () {
+            StartLoading();
+        },
+        success: function (response) {
+            EndLoading();
+
+            if (response.status === "Success") {
+                swal({
+                    title: "اعلان",
+                    text: "عملیات با موفقیت انحام شد .",
+                    icon: "success",
+                    button: "بستن"
+                });
+
+                $("#QuestionDetailMainBox").load(location.href + " #QuestionDetailMainBox");
+            }
+            else if (response.status === "NotEnoughScoreForDown") {
+                swal({
+                    title: "اعلان",
+                    text: "شما امیتاز کافی برای ثبت امتیاز منفی را ندارید .",
+                    icon: "warning",
+                    button: "باشه"
+                });
+            }
+            else if (response.status === "Error") {
+                swal({
+                    title: "خطا",
+                    text: "عملیات با خطا مواجه شد .",
+                    icon: "error",
+                    button: "بستن"
+                });
+            }
+            else if (response.status === "UserCreateScoreBefore") {
+                swal({
+                    title: "اعلان",
+                    text: "شما قبلا برای این پاسخ امتیاز داده اید .",
+                    icon: "info",
+                    button: "بستن"
+                });
+            }
+            else if (response.status === "NotEnoughScoreForUp") {
+                swal({
+                    title: "اعلان",
+                    text: "شما امیتاز کافی برای ثبت امتیاز منفی را ندارید .",
+                    icon: "warning",
+                    button: "باشه"
+                });
+            }
+        },
+        error: function () {
+            EndLoading();
+            swal({
+                title: "خطا",
+                text: "عملیات با خطا مواجه شد لطفا مجدد تلاش کنید .",
+                icon: "error",
+                button: "باشه"
+            });
+        }
+    });
+}
+
+function AddQuestionToBookmark(questionId) {
+    $.ajax({
+        url: "/AddQuestionToBookmark",
+        type: "post",
+        data: {
+            questionId: questionId
+        },
+        beforeSend: function () {
+            StartLoading();
+        },
+        success: function (response) {
+            EndLoading();
+
+            if (response.status === "Success") {
+                swal({
+                    title: "اعلان",
+                    text: "عملیات با موفقیت انحام شد .",
+                    icon: "success",
+                    button: "بستن"
+                });
+
+                $("#QuestionDetailMainBox").load(location.href + " #QuestionDetailMainBox");
+            }
+            else if (response.status === "NotAuthorize") {
+                swal({
+                    title: "اعلان",
+                    text: "برای انتخاب پاسخ درست ابتدا وارد سایت شوید .",
+                    icon: "info",
+                    button: "باشه"
+                });
+            }
+            else if (response.status === "Error") {
+                swal({
+                    title: "خطا",
+                    text: "عملیات با خطا مواجه شد لطفا مجدد تلاش کنید .",
+                    icon: "error",
+                    button: "بستن"
+                });
+            }
+        },
+        error: function () {
+            EndLoading();
+            swal({
+                title: "خطا",
+                text: "عملیات با خطا مواجه شد لطفا مجدد تلاش کنید .",
+                icon: "error",
+                button: "باشه"
+            });
+        }
+    });
+}

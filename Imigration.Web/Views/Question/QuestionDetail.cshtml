@@ -86,8 +86,9 @@
                                         <input type="text" name="" readonly value="http://gl.co/ShKiLO">
                                     </div>
                                     <div class="socials">
+                                        <input  type="text" name=" " readonly value="@($"(PathTools.SiteAddress)/q/{Model.Id}")"/>
                                         <a href=""><i class="icon-facebook"></i></a>
-                                        <a href=""><i class="icon-twitter"></i></a>
+                                        <a href="https://t.me/share/url?url=@($"{Context.Request.Scheme}://{Context.Request.Host + Context.Request.Path}")"><i class="icon-telegram"></i></a>
                                         <a href=""><i class="icon-linkedin"></i></a>
                                         <a href=""><i class="icon-telegram"></i></a>
                                         <a href=""><i class="icon-google-plus"></i></a>
