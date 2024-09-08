@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Imigration.Domains.Entities.Questions;
 using Imigration.Domains.Entities.Tags;
+using Imigration.Domains.Enums;
 using Imigration.Domains.ViewModels.Question;
 
 namespace Imigration.Application.Services.Interfaces
@@ -34,11 +35,14 @@ namespace Imigration.Application.Services.Interfaces
         Task AddViewFormQuestion(string userIp, Question question);
 
         #endregion
+
         #region Answwer
         Task<List<Answer>> GetAllQuestionAnswers(long questionId);
         Task<bool> HasYserAccessToSelectTrueAnswer(long userId,long answerId);
 
         Task SelectTrueAnswer(long userid , long answerId);
+        Task<CreateScoreForAnswerResult> CreateScoreForAnswer(long answerId, AnswerScoreType type,long userId);
+        Task<CreateScoreForAnswerResult> CreateScoreUpForQuestion(long questionId, QuestionScoreType type,long userId);
         #endregion
     }
 }

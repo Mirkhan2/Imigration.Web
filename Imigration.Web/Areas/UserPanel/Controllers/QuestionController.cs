@@ -1,6 +1,7 @@
 ﻿using Imigration.Application.Extensions;
 using Imigration.Application.Security;
 using Imigration.Application.Services.Interfaces;
+using Imigration.Domains.Enums;
 using Imigration.Domains.ViewModels.Question;
 using Imigration.Web.Controllers;
 using Microsoft.AspNetCore.Authorization;
@@ -165,6 +166,119 @@ namespace Imigration.Web.Areas.UserPanel.Controllers
             return new JsonResult(new {status = "Error"});
 
         }
+        #endregion
+
+        #region Score Answer
+
+        [HttpPost("ScoreUpForAnswer")]
+        public async Task<IActionResult> ScoreForAnswer(long answerId)
+        {
+             var result = await _questionService.CreateScoreForAnswer(answerId,AnswerScoreType.Plus,User.GetUserId());
+            switch (result)
+            {
+                case CreateScoreForAnswerResult.Error:
+                    return new JsonResult(new { status = "Error" });
+                    
+                case CreateScoreForAnswerResult.NOtEnumScoreForDown:
+                    return new JsonResult(new { status = "NOtEnoughScoreForDown" });
+
+                   
+                case CreateScoreForAnswerResult.NOtEnumScoreForUp:
+                    return new JsonResult(new { status = "NOtEnoughScoreForUp" });
+
+                  
+                case CreateScoreForAnswerResult.UserCreateScoreBefore:
+                    return new JsonResult(new { status = "NOtEnoughScoreForBefore" });
+
+                  
+                case CreateScoreForAnswerResult.Success:
+                    return new JsonResult(new { status = "Success" });
+                default:
+                    throw new ArgumentOutOfRangeException();
+                  
+            }
+        }
+        [HttpPost("ScoreDownForAnswer")]
+        public async Task<IActionResult> ScoreDownForAnswer(long answerId)
+        {
+            var result = await _questionService.CreateScoreForAnswer(answerId, AnswerScoreType.Plus, User.GetUserId());
+            switch (result)
+            {
+                case CreateScoreForAnswerResult.Error:
+                    return new JsonResult(new { status = "Error" });
+                 
+                case CreateScoreForAnswerResult.NOtEnumScoreForDown:
+                    return new JsonResult(new { status = "NOtEnoughScoreForDown" });
+
+                case CreateScoreForAnswerResult.NOtEnumScoreForUp:
+                    return new JsonResult(new { status = "NOtEnoughScoreForUp" });
+
+                case CreateScoreForAnswerResult.UserCreateScoreBefore:
+                    return new JsonResult(new { status = "NOtEnoughScoreForBefore" });
+
+                case CreateScoreForAnswerResult.Success:
+                    return new JsonResult(new { status = "Success" });
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        #endregion
+        #region Score Question
+
+        [HttpPost("ScoreUpForQuestion")]
+        public async Task<IActionResult> ScoreUpForQuestion(long questionId)
+        {
+            var result = await _questionService.CreateScoreForScoreUpForQuestion(questionId, QuestionScoreType.Plus, User.GetUserId());
+            switch (result)
+            {
+                case CreateScoreForAnswerResult.Error:
+                    return new JsonResult(new { status = "Error" });
+
+                case CreateScoreForAnswerResult.NOtEnumScoreForDown:
+                    return new JsonResult(new { status = "NOtEnoughScoreForDown" });
+
+
+                case CreateScoreForAnswerResult.NOtEnumScoreForUp:
+                    return new JsonResult(new { status = "NOtEnoughScoreForUp" });
+
+
+                case CreateScoreForAnswerResult.UserCreateScoreBefore:
+                    return new JsonResult(new { status = "NOtEnoughScoreForBefore" });
+
+
+                case CreateScoreForAnswerResult.Success:
+                    return new JsonResult(new { status = "Success" });
+                default:
+                    throw new ArgumentOutOfRangeException();
+
+            }
+        }
+        [HttpPost("ScoreDownForQuestion")]
+        public async Task<IActionResult> ScoreDownForQuestion(long questionId)
+        {
+            var result = await _questionService.CreateScoreForAnswer(questionId, QuestionScoreType.Plus, User.GetUserId());
+            switch (result)
+            {
+                case CreateScoreForAnswerResult.Error:
+                    return new JsonResult(new { status = "Error" });
+
+                case CreateScoreForAnswerResult.NOtEnumScoreForDown:
+                    return new JsonResult(new { status = "NOtEnoughScoreForDown" });
+
+                case CreateScoreForAnswerResult.NOtEnumScoreForUp:
+                    return new JsonResult(new { status = "NOtEnoughScoreForUp" });
+
+                case CreateScoreForAnswerResult.UserCreateScoreBefore:
+                    return new JsonResult(new { status = "NOtEnoughScoreForBefore" });
+
+                case CreateScoreForAnswerResult.Success:
+                    return new JsonResult(new { status = "Success" });
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
         #endregion
 
         #region select True Answer

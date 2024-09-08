@@ -2,6 +2,10 @@
     $("#UserAvatar").click();
 }
 
+function LoadUrl(url) {
+    location.href = url;
+}
+
 function UploadUserAvatar(url) {
 
     var avatarInput = document.getElementById("UserAvatar");
@@ -187,6 +191,263 @@ function AnswerQuestionFormDone(response) {
         editor.setData('');
     }
 }
+
+function selectTrueAnswer(answerId) {
+    $.ajax({
+        url: "/SelectTrueAnswer",
+        type: "post",
+        data: {
+            answerId: answerId
+        },
+        beforeSend: function () {
+            StartLoading();
+        },
+        success: function (response) {
+            EndLoading();
+
+            if (response.status === "Success") {
+                swal({
+                    title: "اعلان",
+                    text: "عملیات با موفقیت انحام شد .",
+                    icon: "success",
+                    button: "بستن"
+                });
+
+                $("#AnswersBox").load(location.href + " #AnswersBox");
+            }
+            else if (response.status === "NotAuthorize") {
+                swal({
+                    title: "اعلان",
+                    text: "برای انتخاب پاسخ درست ابتدا وارد سایت شوید .",
+                    icon: "info",
+                    button: "باشه"
+                });
+            }
+            else if (response.status === "NotAccess") {
+                swal({
+                    title: "خطا",
+                    text: "شما به این عملیات دسترسی ندارید .",
+                    icon: "error",
+                    button: "بستن"
+                });
+            }
+        },
+        error: function () {
+            EndLoading();
+            swal({
+                title: "خطا",
+                text: "عملیات با خطا مواجه شد لطفا مجدد تلاش کنید .",
+                icon: "error",
+                button: "باشه"
+            });
+        }
+    });
+}
+
+function ScoreUpForAnswer(answerId) {
+    $.ajax({
+        url: "/ScoreUpForAnswer",
+        type: "post",
+        data: {
+            answerId: answerId
+        },
+        beforeSend: function () {
+            StartLoading();
+        },
+        success: function (response) {
+            EndLoading();
+
+            if (response.status === "Success") {
+                swal({
+                    title: "اعلان",
+                    text: "عملیات با موفقیت انحام شد .",
+                    icon: "success",
+                    button: "بستن"
+                });
+
+                $("#AnswersBox").load(location.href + " #AnswersBox");
+            }
+            else if (response.status === "NotEnoughScoreForDown") {
+                swal({
+                    title: "اعلان",
+                    text: "شما امیتاز کافی برای ثبت امتیاز منفی را ندارید .",
+                    icon: "warning",
+                    button: "باشه"
+                });
+            }
+            else if (response.status === "Error") {
+                swal({
+                    title: "خطا",
+                    text: "عملیات با خطا مواجه شد .",
+                    icon: "error",
+                    button: "بستن"
+                });
+            }
+            else if (response.status === "UserCreateScoreBefore") {
+                swal({
+                    title: "اعلان",
+                    text: "شما قبلا برای این پاسخ امتیاز داده اید .",
+                    icon: "info",
+                    button: "بستن"
+                });
+            }
+            else if (response.status === "NotEnoughScoreForUp") {
+                swal({
+                    title: "اعلان",
+                    text: "شما امیتاز کافی برای ثبت امتیاز منفی را ندارید .",
+                    icon: "warning",
+                    button: "باشه"
+                });
+            }
+        },
+        error: function () {
+            EndLoading();
+            swal({
+                title: "خطا",
+                text: "عملیات با خطا مواجه شد لطفا مجدد تلاش کنید .",
+                icon: "error",
+                button: "باشه"
+            });
+        }
+    });
+}
+
+function ScoreDownForAnswer(answerId) {
+    $.ajax({
+        url: "/ScoreDownForAnswer",
+        type: "post",
+        data: {
+            answerId: answerId
+        },
+        beforeSend: function () {
+            StartLoading();
+        },
+        success: function (response) {
+            EndLoading();
+
+            if (response.status === "Success") {
+                swal({
+                    title: "اعلان",
+                    text: "عملیات با موفقیت انحام شد .",
+                    icon: "success",
+                    button: "بستن"
+                });
+
+                $("#AnswersBox").load(location.href + " #AnswersBox");
+            }
+            else if (response.status === "NotEnoughScoreForDown") {
+                swal({
+                    title: "اعلان",
+                    text: "شما امیتاز کافی برای ثبت امتیاز منفی را ندارید .",
+                    icon: "warning",
+                    button: "باشه"
+                });
+            }
+            else if (response.status === "Error") {
+                swal({
+                    title: "خطا",
+                    text: "عملیات با خطا مواجه شد .",
+                    icon: "error",
+                    button: "بستن"
+                });
+            }
+            else if (response.status === "UserCreateScoreBefore") {
+                swal({
+                    title: "اعلان",
+                    text: "شما قبلا برای این پاسخ امتیاز داده اید .",
+                    icon: "info",
+                    button: "بستن"
+                });
+            }
+            else if (response.status === "NotEnoughScoreForUp") {
+                swal({
+                    title: "اعلان",
+                    text: "شما امیتاز کافی برای ثبت امتیاز منفی را ندارید .",
+                    icon: "warning",
+                    button: "باشه"
+                });
+            }
+        },
+        error: function () {
+            EndLoading();
+            swal({
+                title: "خطا",
+                text: "عملیات با خطا مواجه شد لطفا مجدد تلاش کنید .",
+                icon: "error",
+                button: "باشه"
+            });
+        }
+    });
+}
+
+function ScoreUpForQuestion(questionId) {
+    $.ajax({
+        url: "/ScoreUpForQuestion",
+        type: "post",
+        data: {
+            questionId: questionId
+        },
+        beforeSend: function () {
+            StartLoading();
+        },
+        success: function (response) {
+            EndLoading();
+
+            if (response.status === "Success") {
+                swal({
+                    title: "اعلان",
+                    text: "عملیات با موفقیت انحام شد .",
+                    icon: "success",
+                    button: "بستن"
+                });
+
+                $("#QuestionDetailMainBox").load(location.href + " #QuestionDetailMainBox");
+            }
+            else if (response.status === "NotEnoughScoreForDown") {
+                swal({
+                    title: "اعلان",
+                    text: "شما امیتاز کافی برای ثبت امتیاز منفی را ندارید .",
+                    icon: "warning",
+                    button: "باشه"
+                });
+            }
+            else if (response.status === "Error") {
+                swal({
+                    title: "خطا",
+                    text: "عملیات با خطا مواجه شد .",
+                    icon: "error",
+                    button: "بستن"
+                });
+            }
+            else if (response.status === "UserCreateScoreBefore") {
+                swal({
+                    title: "اعلان",
+                    text: "شما قبلا برای این پاسخ امتیاز داده اید .",
+                    icon: "info",
+                    button: "بستن"
+                });
+            }
+            else if (response.status === "NotEnoughScoreForUp") {
+                swal({
+                    title: "اعلان",
+                    text: "شما امیتاز کافی برای ثبت امتیاز منفی را ندارید .",
+                    icon: "warning",
+                    button: "باشه"
+                });
+            }
+        },
+        error: function () {
+            EndLoading();
+            swal({
+                title: "خطا",
+                text: "عملیات با خطا مواجه شد لطفا مجدد تلاش کنید .",
+                icon: "error",
+                button: "باشه"
+            });
+        }
+    });
+}
+
 function ScoreDownForQuestion(questionId) {
     $.ajax({
         url: "/ScoreDownForQuestion",

@@ -13,4 +13,22 @@ namespace Imigration.Domains.Enums
 
         [Display(Name = "منفی")] Minus,
     }
+    public enum AnswerScoreType
+    {
+        [Display(Name = "مثبت")] Plus,
+
+        [Display(Name = "منفی")] Minus,
+    }
+    public enum CreateScoreForAnswerResult
+    {
+        Error,
+
+        NOtEnumScoreForDown,
+
+        NOtEnumScoreForUp,
+        UserCreateScoreBefore,
+
+
+        Success
+    }
 }

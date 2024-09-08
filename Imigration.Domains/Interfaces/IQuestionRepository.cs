@@ -38,7 +38,8 @@ namespace Imigration.Domains.Interfaces
 
         #region View
 
-        Task<bool> IsExistsViewForQuestion(string userIp, long questionId);
+        Task<bool> IsExistsViewForQuestions(string userIp, long questionId);
+
         Task AddQuestionView(QuestionView view);
 
         #endregion
@@ -50,9 +51,14 @@ namespace Imigration.Domains.Interfaces
         #region Answer
 
         Task AddAnswer(Answer answer);
+        Task AddAnswerUserScore(AnswerUserScore score);
+        Task AddQuestionUserScore(AnswerUserScore score);
         Task UpdateAnswer(Answer answer);
         Task<List<Answer>> GetAllQuestionAnswers(long questionId );
         Task<Answer?> GetAnswerById(long id);
+        Task<bool> IsExistUserScoreForAnswer(long answerId, long userId);
+
+        Task<bool> IsExistUserScoreForQuestion(long questionId, long userId);
 
         #endregion
     }

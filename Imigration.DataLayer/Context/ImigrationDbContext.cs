@@ -35,6 +35,8 @@ namespace Imigration.DataLayer.Context
         public DbSet<Tag> Tags { get; set; }
         public DbSet<RequestTag> RequestTags { get; set; }
         public DbSet<QuestionUserScore> QuestionUserScores { get; set; }
+        public DbSet<AnswerUserScore> AnswerUserScores { get; set; }
+
 
 
         #endregion

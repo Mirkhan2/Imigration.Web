@@ -19,6 +19,8 @@ namespace Imigration.Domains.ViewModels.Common
         public int MinScoreForSilverMedal { get; set; }
 
         public int MinScoreForGoldMedal { get; set; }
+        public int MinScoreForUpScoreAnswer { get; set; }
+        public int MinScoreForDownScoreAnswer { get; set; }
 
     }
 }

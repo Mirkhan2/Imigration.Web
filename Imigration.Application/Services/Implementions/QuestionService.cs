@@ -6,6 +6,7 @@ using Imigration.DataLayer.Repositories;
 using Imigration.Domains.Entities.Account;
 using Imigration.Domains.Entities.Questions;
 using Imigration.Domains.Entities.Tags;
+using Imigration.Domains.Enums;
 using Imigration.Domains.Interfaces;
 using Imigration.Domains.ViewModels.Common;
 using Imigration.Domains.ViewModels.Question;
@@ -277,7 +278,7 @@ namespace Imigration.Application.Services.Implementions
             await _questionRepository.AddAnswer(answer);
             await _questionRepository.SaveChanges();
 
-          await  _userService.UpdateUserScoreAndMedal(answerQuestion.UserId, _scoreManagement.AddNewQuestionScrore);
+            await _userService.UpdateUserScoreAndMedal(answerQuestion.UserId, _scoreManagement.AddNewQuestionScrore);
 
             return true;
         }
@@ -289,7 +290,7 @@ namespace Imigration.Application.Services.Implementions
 
         public async Task AddViewFormQuestion(string userIp, Question question)
         {
-            if (await _questionRepository.IsExistsViewForQuestion(userIp, question.Id))
+            if (await _questionRepository.IsExistsViewForQuestions(userIp, question.Id))
             {
                 return;
             }
@@ -313,7 +314,7 @@ namespace Imigration.Application.Services.Implementions
             var answer = await _questionRepository.GetAnswerById(answerId);
 
             if (answer == null) return false;
-            
+
             var user = await _userService.GetUserById(userId);
 
             if (user == null) return false;
@@ -325,22 +326,77 @@ namespace Imigration.Application.Services.Implementions
                 return false;
             }
 
-             return true;
+            return true;
 
-            
+
         }
 
         public async Task SelectTrueAnswer(long userid, long answerId)
         {
             var answer = await _questionRepository.GetAnswerById(answerId);
 
+            if (answer == null) return;
             answer.IsTrue = !answer.IsTrue;
 
             await _questionRepository.UpdateAnswer(answer);
-           await _questionRepository.SaveChanges();
+            await _questionRepository.SaveChanges();
 
         }
+
+        public async Task<CreateScoreForAnswerResult> CreateScoreForAnswer(long answerId, AnswerScoreType type, long userId)
+        {
+            var answer = await _questionRepository.GetAnswerById(answerId);
+
+            if (answer == null) return CreateScoreForAnswerResult.Error;
+
+            var user = await _userService.GetUserById(userId);
+            if (user == null) return CreateScoreForAnswerResult.Error;
+
+            if (type == AnswerScoreType.Minus && user.Score < _scoreManagement.MinScoreForDownScoreAnswer)
+            {
+                return CreateScoreForAnswerResult.NOtEnumScoreForDown;
+            }
+            if (type == AnswerScoreType.Plus && user.Score < _scoreManagement.MinScoreForUpScoreAnswer)
+            {
+                return CreateScoreForAnswerResult.NOtEnumScoreForUp;
+            }
+
+            if (await _questionRepository.IsExistUserScoreForAnswer(userId,answerId))
+            {
+                return CreateScoreForAnswerResult.UserCreateScoreBefore;
+            }
+            var score = new AnswerUserScore()
+            {
+                AnswerId = answerId,
+                UserId = userId,    
+                Type = type
+               
+            };
+            await _questionRepository.AddAnswerUserScore(score);
+
+            if (type == AnswerScoreType.Minus)
+            {
+                answer.Score -= 1;
+            }
+            else
+            {
+                answer.Score += 1;
+            }
+            await _questionRepository.UpdateAnswer(answer);
+
+            await _questionRepository.SaveChanges();
+
+            return CreateScoreForAnswerResult.Success;
+        }
+
+        public Task<CreateScoreForAnswerResult> CreateScoreUpForQuestion(long questionId, QuestionScoreType type, long userId)
+        {
+          
+
+        }
+
+        #endregion
+
     }
 
-    #endregion
 }

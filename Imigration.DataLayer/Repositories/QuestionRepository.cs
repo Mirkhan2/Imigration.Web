@@ -33,7 +33,7 @@ namespace Imigration.DataLayer.Repositories
         }
         public async Task<IQueryable<Tag>> GetAllTagsAsQueryable()
         {
-            return  _context.Tags.Where(s => !s.IsDelete).AsQueryable();
+            return _context.Tags.Where(s => !s.IsDelete).AsQueryable();
         }
 
         public async Task<bool> IsExitTagByName(string name)
@@ -78,7 +78,7 @@ namespace Imigration.DataLayer.Repositories
 
         public Task<Question> GetQUestionById(long id)
         {
-           return  _context.Questions.FirstOrDefaultAsync(s => s.Id == id && !s.IsDelete);
+            return _context.Questions.FirstOrDefaultAsync(s => s.Id == id && !s.IsDelete);
         }
 
 
@@ -94,7 +94,7 @@ namespace Imigration.DataLayer.Repositories
 
         public async Task<IQueryable<Question>> GetAllQuestions()
         {
-            return  _context.Questions.Where
+            return _context.Questions.Where
                 (s => !s.IsDelete).AsQueryable();
         }
 
@@ -131,6 +131,12 @@ namespace Imigration.DataLayer.Repositories
             return await _context.QuestionViews.AnyAsync(s => s.UserIP.Equals(userIp) && s.QuestionId == questionId);
         }
 
+        public async Task<bool> IsExistsViewForQuestions(string userIp, long questionId)
+        {
+            return await _context.QuestionViews.AnyAsync(s => s.UserIP.Equals(userIp) && s.QuestionId == questionId);
+
+        }
+
         public async Task AddQuestionView(QuestionView view)
         {
             await _context.QuestionViews.AddAsync(view);
@@ -143,8 +149,8 @@ namespace Imigration.DataLayer.Repositories
 
         public async Task AddAnswer(Answer answer)
         {
-         await   _context.Answers.AddAsync(answer);
-        
+            await _context.Answers.AddAsync(answer);
+
         }
 
         public async Task<List<Answer>> GetAllQuestionAnswers(long questionId)
@@ -164,6 +170,29 @@ namespace Imigration.DataLayer.Repositories
         {
             _context.Answers.Update(answer);
         }
+
+        public async Task<bool> IsExistUserScoreForAnswer(long answerId, long userId)
+        {
+            return await _context.AnswerUserScores.AnyAsync(s => s.AnswerId == answerId && s.UserId == userId);
+
+
+        }
+
+        public async Task AddAnswerUserScore(AnswerUserScore score)
+        {
+            await _context.AnswerUserScores.AddAsync(score);
+        }
+
+        public async Task<bool> IsExistUserScoreForQuestion(long questionId, long userId)
+        {
+            return await _context.QuestionUserScores.AddAsync(s => s.QuestionId == questionId && s.UserId == userId);
+        }
+
+        public async Task AddQuestionUserScore(AnswerUserScore score)
+        {
+            await _context.QuestionUserScores.AddAsync(score);
+        }
+
 
 
         #endregion
