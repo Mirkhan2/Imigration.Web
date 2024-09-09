@@ -16,8 +16,10 @@ namespace Imigration.Domains.Entities.Account
         [Key]
         public long Id { get; set; }
 
-        public long QuestionId { get; set; }
+        //public long QuestionId { get; set; }
 
+        //public long UserId { get; set; }
+        public long QuestionId { get; set; }
         public long UserId { get; set; }
 
         #endregion

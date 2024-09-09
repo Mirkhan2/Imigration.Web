@@ -11,6 +11,7 @@ namespace Imigration.Domains.Entities.Questions
 {
     public class Answer : BaseEntity
     {
+
         #region Properties
 
         [Display(Name = "پاسخ")]
@@ -33,6 +34,7 @@ namespace Imigration.Domains.Entities.Questions
         public User User { get; set; }
 
         public Question Question { get; set; }
+
         public ICollection<AnswerUserScore> AnswerUserScores { get; set; }
 
         #endregion

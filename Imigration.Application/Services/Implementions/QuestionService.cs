@@ -1,4 +1,5 @@
 ﻿
+using System.Text.Json.Serialization;
 using Imigration.Application.Extensions;
 using Imigration.Application.Security;
 using Imigration.Application.Services.Interfaces;
@@ -12,6 +13,7 @@ using Imigration.Domains.ViewModels.Common;
 using Imigration.Domains.ViewModels.Question;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using static Imigration.Domains.ViewModels.Question.FilterQuestionViewModel;
 
 namespace Imigration.Application.Services.Implementions
@@ -21,7 +23,9 @@ namespace Imigration.Application.Services.Implementions
         #region Ctor
 
         private readonly IQuestionRepository _questionRepository;
+
         private ScoreManagementViewModel _scoreManagement;
+
         private IUserService _userService;
 
         public QuestionService(IQuestionRepository questionRepository, IOptions<ScoreManagementViewModel> scoreManagement, IUserService userService)
@@ -53,12 +57,12 @@ namespace Imigration.Application.Services.Implementions
             {
                 foreach (var tag in tags)
                 {
-                    var isExistTag = await _questionRepository.IsExitTagByName(tag.SanitizeText().Trim().ToLower());
+                    var isExistTag = await _questionRepository.IsExistsTagByName(tag.SanitizeText().Trim().ToLower());
 
                     if (isExistTag) continue;
 
                     var isUserRequestedForTag =
-                        await _questionRepository.CheckUserRequestForTag(userId, tag.SanitizeText().Trim().ToLower());
+                        await _questionRepository.CheckUserRequestedForTag(userId, tag.SanitizeText().Trim().ToLower());
 
                     if (isUserRequestedForTag)
                     {
@@ -185,6 +189,52 @@ namespace Imigration.Application.Services.Implementions
         #endregion
 
         #region Questions
+        public async Task<bool> EditQuestion(EditQuestionViewModel edit)
+        {
+            var question = await _questionRepository.GetQuestionById(edit.UserId);
+            if (question != null) return false;
+            var user = await _userService.GetUserById(edit.Id);
+            if (user == null) return false;
+            if (question.UserId != edit.UserId && !user.IsAdmin) return false;
+
+            question.Title = edit.Title;
+            question.Content = edit.Description;
+
+            #region Delete CUrrent Tags
+            var currenTags = question.SelectQuestionTags.ToList();
+            foreach (var tag in currenTags)
+            {
+                _questionRepository.RemoveSelectQuestionTag(tag);
+            }
+            #endregion
+
+            #region Add New Tags
+            if (edit.SelectedTags != null && edit.SelectedTags.Any())
+            {
+                foreach (var questionSelectedTag in edit.SelectedTags)
+                {
+                    var tag = await _questionRepository.GetTagByName(questionSelectedTag.SanitizeText().Trim().ToLower());
+
+                    if (tag != null) continue;
+                    tag.UseCount += 1;
+                    await _questionRepository.UpdateTag(tag);
+
+                    var selectedTag = new SelectQuestionTag()
+                    {
+                        QuestionId = question.Id,
+                        TagId = tag.Id,
+                    };
+                    await _questionRepository.AddSelectedQuestionTag(selectedTag);
+                }
+                await _questionRepository.SaveChanges();
+            }
+
+            #endregion
+           return true;
+
+        }
+
+
         public async Task<FilterQuestionViewModel> FilterQuestions(FilterQuestionViewModel filter)
         {
 
@@ -253,7 +303,7 @@ namespace Imigration.Application.Services.Implementions
 
         public async Task<Question> GetQUestionById(long id)
         {
-            return await _questionRepository.GetQUestionById(id);
+            return await _questionRepository.GetQuestionById(id);
         }
 
         public Task<IQueryable<Tag>> GetAllTagsAsQueryable()
@@ -288,9 +338,9 @@ namespace Imigration.Application.Services.Implementions
             return await _questionRepository.GetAllQuestionAnswers(questionId);
         }
 
-        public async Task AddViewFormQuestion(string userIp, Question question)
+        public async Task AddViewForQuestion(string userIp, Question question)
         {
-            if (await _questionRepository.IsExistsViewForQuestions(userIp, question.Id))
+            if (await _questionRepository.IsExistsViewForQuestion(userIp, question.Id))
             {
                 return;
             }
@@ -306,10 +356,79 @@ namespace Imigration.Application.Services.Implementions
             question.ViewCount += 1;
 
             await _questionRepository.UpdateQuestion(question);
+
             await _questionRepository.SaveChanges();
         }
 
-        public async Task<bool> HasYserAccessToSelectTrueAnswer(long userId, long answerId)
+        public async Task<bool> AddQuestionToBookmark(long questionId, long userId)
+        {
+            var question = await GetQUestionById(questionId);
+
+            if (question == null) return false;
+
+            if (await _questionRepository.IsExistsQuestionInUserBookmarks(questionId, userId))
+            {
+                var bookmark = await _questionRepository.GetBookmarkByQuestionAndUserId(questionId, userId);
+                if (bookmark == null) return false;
+
+                _questionRepository.RemoveBookmark(bookmark);
+            }
+            else
+            {
+                var newbookmark = new UserQuestionBookmark
+                {
+                    QuestionId = questionId,
+                    UserId = userId
+                };
+                await _questionRepository.AddBookmark(newbookmark);
+            }
+
+            await _questionRepository.SaveChanges();
+
+            return true;
+
+        }
+
+        public async Task<bool> IsExistsQuestionInUserBookmarks(long userId, long questionId)
+        {
+            return await _questionRepository.IsExistsQuestionInUserBookmarks(questionId, userId);
+        }
+
+        public async Task<EditQuestionViewModel?> FillEditQuestionViewModel(long questionId, long userId)
+        {
+            var question = await GetQUestionById(questionId);
+
+            if (question == null) return null;
+
+            var user = await _userService.GetUserById(userId);
+            if (user == null) return null;
+
+            if (question.UserId != user.Id && !user.IsAdmin)
+            {
+                return null;
+            }
+
+            var tags = await GetTagListByQuestionId(questionId);
+
+            var result = new EditQuestionViewModel
+            {
+                Id = question.Id,
+                Description = question.Content,
+                Title = question.Title,
+                SelectedTagsJson = JsonConvert.SerializeObject(tags)
+
+            };
+            return result;
+        }
+
+
+
+
+
+        #endregion
+
+        #region Answer
+        public async Task<bool> HasUserAccessToSelectTrueAnswer(long userId, long answerId)
         {
             var answer = await _questionRepository.GetAnswerById(answerId);
 
@@ -361,16 +480,16 @@ namespace Imigration.Application.Services.Implementions
                 return CreateScoreForAnswerResult.NOtEnumScoreForUp;
             }
 
-            if (await _questionRepository.IsExistUserScoreForAnswer(userId,answerId))
+            if (await _questionRepository.IsExistsUserScoreForQuestion(userId, answerId))
             {
                 return CreateScoreForAnswerResult.UserCreateScoreBefore;
             }
             var score = new AnswerUserScore()
             {
                 AnswerId = answerId,
-                UserId = userId,    
+                UserId = userId,
                 Type = type
-               
+
             };
             await _questionRepository.AddAnswerUserScore(score);
 
@@ -389,14 +508,68 @@ namespace Imigration.Application.Services.Implementions
             return CreateScoreForAnswerResult.Success;
         }
 
-        public Task<CreateScoreForAnswerResult> CreateScoreUpForQuestion(long questionId, QuestionScoreType type, long userId)
+        public async Task<CreateScoreForAnswerResult> CreateScoreForQuestion(long questionId, QuestionScoreType type, long userId)
         {
-          
+            var question = await _questionRepository.GetAnswerById(questionId);
 
+            if (question == null) return CreateScoreForAnswerResult.Error;
+
+            var user = await _userService.GetUserById(userId);
+
+            if (user == null) return CreateScoreForAnswerResult.Error;
+
+            if (type == QuestionScoreType.Minus && user.Score < _scoreManagement.MinScoreForDownScoreAnswer)
+            {
+                return CreateScoreForAnswerResult.NOtEnumScoreForDown;
+            }
+            if (type == QuestionScoreType.Plus && user.Score < _scoreManagement.MinScoreForUpScoreAnswer)
+            {
+                return CreateScoreForAnswerResult.NOtEnumScoreForUp;
+            }
+            if (await _questionRepository.IsExistsUserScoreForQuestion(questionId, userId))
+            {
+                return CreateScoreForAnswerResult.UserCreateScoreBefore;
+            }
+
+            var score = new QuestionUserScore()
+            {
+                QuestionId = questionId,
+              Type = type,
+              UserId = userId
+            };
+
+            await _questionRepository.AddQuestionUserScore(score);
+
+            if (type == QuestionScoreType.Minus)
+            {
+                question.Score -= 1;
+            }
+            else if (type == QuestionScoreType.Plus)
+            {
+                question.Score += 1;
+            }
+
+            await _questionRepository.UpdateQuestion(question);
+
+            await _questionRepository.SaveChanges();
+
+            return CreateScoreForAnswerResult.Success;
         }
 
-        #endregion
 
+
+
+
+        #endregion
+        public Task<Question?> GetQuestionById(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> AnswerQuestion(AnswerQuestionViewModel answerQuestion)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

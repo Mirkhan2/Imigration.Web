@@ -13,36 +13,50 @@ namespace Imigration.Application.Services.Interfaces
     public interface IQuestionService
     {
         #region Tags
+
         Task<List<Tag>> GetAllTags();
 
-        Task<IQueryable<Tag>> GetAllTagsAsQueryable();
-        Task<CreateQuestionResult> CheckTagValidation(List<string>? tags , long userId);
+        Task<CreateQuestionResult> CheckTagValidation(List<string>? tags, long userId);
 
         Task<bool> CreateQuestion(CreateQuestionViewModel createQuestion);
+
         Task<FilterTagViewModel> FilterTags(FilterTagViewModel filter);
+
         Task<List<string>> GetTagListByQuestionId(long questionId);
 
-        //Task<Question> GetQuery
-
         #endregion
 
-        #region QUestions
+        #region Questions
+
         Task<FilterQuestionViewModel> FilterQuestions(FilterQuestionViewModel filter);
 
-        Task<Question> GetQUestionById(long id);
+        Task<Question?> GetQuestionById(long id);
 
-        Task<bool> AnwerQuestion(AnswerQuestionViewModel answerQuestion);
-        Task AddViewFormQuestion(string userIp, Question question);
+        Task<bool> AnswerQuestion(AnswerQuestionViewModel answerQuestion);
+
+        Task AddViewForQuestion(string userIp, Question question);
+
+        Task<bool> AddQuestionToBookmark(long questionId, long userId);
+
+        Task<bool> IsExistsQuestionInUserBookmarks(long questionId, long userId);
+
+        Task<EditQuestionViewModel?> FillEditQuestionViewModel(long questionId, long userId);
+       Task<bool> EditQuestion(EditQuestionViewModel edit);
 
         #endregion
 
-        #region Answwer
-        Task<List<Answer>> GetAllQuestionAnswers(long questionId);
-        Task<bool> HasYserAccessToSelectTrueAnswer(long userId,long answerId);
+        #region answer
 
-        Task SelectTrueAnswer(long userid , long answerId);
-        Task<CreateScoreForAnswerResult> CreateScoreForAnswer(long answerId, AnswerScoreType type,long userId);
-        Task<CreateScoreForAnswerResult> CreateScoreUpForQuestion(long questionId, QuestionScoreType type,long userId);
+        Task<List<Answer>> GetAllQuestionAnswers(long questionId);
+
+        Task<bool> HasUserAccessToSelectTrueAnswer(long userId, long answerId);
+
+        Task SelectTrueAnswer(long userId, long answerId);
+
+        Task<CreateScoreForAnswerResult> CreateScoreForAnswer(long answerId, AnswerScoreType type, long userId);
+
+        Task<CreateScoreForAnswerResult> CreateScoreForQuestion(long questionId, QuestionScoreType type, long userId);
+
         #endregion
     }
 }

@@ -36,7 +36,8 @@ namespace Imigration.Web.Areas.UserPanel.Controllers
         public async Task<IActionResult> CreateQuestion(CreateQuestionViewModel createQuestion)
         {
            
-            var tagResult = await _questionService.CheckTagValidation(createQuestion.SelectedTags, HttpContext.User.GetUserId());
+            var tagResult =
+                await _questionService.CheckTagValidation(createQuestion.SelectedTags, HttpContext.User.GetUserId());
 
             if(tagResult.Status == CreateQuestionResultEnum.NotValidTag)
             {
@@ -47,18 +48,88 @@ namespace Imigration.Web.Areas.UserPanel.Controllers
 
                 return View(createQuestion);
             }
+
+            if (!ModelState.IsValid)
+            {
+                createQuestion.SelectedTagsJson = JsonConvert.SerializeObject(createQuestion.SelectedTags);
+                createQuestion.SelectedTags = null;
+               
+                TempData[WarningMessage] = "information nicht Valid ";
+                return View(createQuestion);    
+
+            }
             createQuestion.UserId = HttpContext.User.GetUserId();
             var result = await _questionService.CreateQuestion(createQuestion);
+
             if (result)
             {
                 TempData[SuccessMessage] = " succsed";
                 return Redirect("/");
             }
-
-            createQuestion.SelectedTagsJson =  JsonConvert.SerializeObject(createQuestion.SelectedTags);
+            createQuestion.SelectedTagsJson = JsonConvert.SerializeObject(createQuestion.SelectedTags);
             createQuestion.SelectedTags = null;
 
+
+            return View(createQuestion);
+
+           
+        }
+        #endregion
+
+        #region Edit Question
+        [HttpGet("edit-question/{id}")]
+        [Authorize]
+        public async Task<IActionResult> EditQuestion(long id)
+        {
+            var result = await _questionService.FillEditQuestionViewModel(id, User.GetUserId());
+
+            if (result == null) return NotFound();
+            
+
+            
+
             return View();
+        }
+        [HttpPost("edit-question/{id}"),ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditQuestion( EditQuestionViewModel edit)
+        {
+
+            var tagResult =
+                await _questionService.CheckTagValidation(edit.SelectedTags, HttpContext.User.GetUserId());
+
+            if (tagResult.Status == CreateQuestionResultEnum.NotValidTag)
+            {
+                edit.SelectedTagsJson = JsonConvert.SerializeObject(edit.SelectedTags);
+                edit.SelectedTags = null;
+
+                TempData[WarningMessage] = tagResult.Message;
+
+                return View(edit);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                edit.SelectedTagsJson = JsonConvert.SerializeObject(edit.SelectedTags);
+                edit.SelectedTags = null;
+
+                TempData[WarningMessage] = "information nicht Valid ";
+                return View(edit);
+
+            }
+            edit.UserId = HttpContext.User.GetUserId();
+
+            var result = await _questionService.EditQuestion(edit);
+
+            if (result)
+            {
+                TempData[SuccessMessage] = " succsed";
+                return Redirect("/");
+            }
+            edit.SelectedTagsJson = JsonConvert.SerializeObject(edit.SelectedTags);
+            edit.SelectedTags = null;
+
+
+            return View(edit);
         }
         #endregion
 
@@ -116,15 +187,24 @@ namespace Imigration.Web.Areas.UserPanel.Controllers
         [HttpGet("question/{questionId}")]
         public async Task<IActionResult> QuestionDetail(long  questionId)
         {
-            var question = await _questionService.GetQUestionById(questionId);
+            var question = await _questionService.GetQuestionById(questionId);
 
             if (question == null) return NotFound();
+
+            ViewBag.IsBookMark = false;
+
+
+            if (!User.Identity.IsAuthenticated 
+                && await _questionService.IsExistsQuestionInUserBookmarks(questionId, User.GetUserId()))
+            {
+                ViewBag.IsBookMark = true;
+            }
 
             var userIp = Request.HttpContext.Connection.RemoteIpAddress;
 
             if (userIp != null) {
 
-                await _questionService.AddViewFormQuestion(userIp.ToString(), question);
+                await _questionService.AddViewForQuestion(userIp.ToString(), question);
 
             }
    
@@ -138,7 +218,7 @@ namespace Imigration.Web.Areas.UserPanel.Controllers
         [HttpGet("question/{questionId}")]
         public async Task<IActionResult> QuestionDetailByShortLink(long questionId)
         {
-            var question = await _questionService.GetQUestionById(questionId);
+            var question = await _questionService.GetQuestionById(questionId);
 
             if (question == null) return NotFound();
 
@@ -155,7 +235,7 @@ namespace Imigration.Web.Areas.UserPanel.Controllers
             }
             answerQuestion.UserId = User.GetUserId();
 
-            var result = await _questionService.AnwerQuestion(answerQuestion);
+            var result = await _questionService.AnswerQuestion(answerQuestion);
             if (result)
             {
                 return new JsonResult(new
@@ -224,12 +304,14 @@ namespace Imigration.Web.Areas.UserPanel.Controllers
         }
 
         #endregion
+
         #region Score Question
 
         [HttpPost("ScoreUpForQuestion")]
         public async Task<IActionResult> ScoreUpForQuestion(long questionId)
         {
-            var result = await _questionService.CreateScoreForScoreUpForQuestion(questionId, QuestionScoreType.Plus, User.GetUserId());
+            var result = await _questionService.CreateScoreForQuestion(questionId, QuestionScoreType.Plus, User.GetUserId());
+
             switch (result)
             {
                 case CreateScoreForAnswerResult.Error:
@@ -257,7 +339,7 @@ namespace Imigration.Web.Areas.UserPanel.Controllers
         [HttpPost("ScoreDownForQuestion")]
         public async Task<IActionResult> ScoreDownForQuestion(long questionId)
         {
-            var result = await _questionService.CreateScoreForAnswer(questionId, QuestionScoreType.Plus, User.GetUserId());
+            var result = await _questionService.CreateScoreForQuestion(questionId, QuestionScoreType.Minus, User.GetUserId());
             switch (result)
             {
                 case CreateScoreForAnswerResult.Error:
@@ -290,7 +372,7 @@ namespace Imigration.Web.Areas.UserPanel.Controllers
             {
                 return new JsonResult(new { status = " NOAuthorize" });
             }
-            if (await _questionService.HasYserAccessToSelectTrueAnswer(User.GetUserId(), answerId))
+            if (await _questionService.HasUserAccessToSelectTrueAnswer(User.GetUserId(), answerId))
             {
                 return new JsonResult(new { status = " NOtAccess" });
             }
@@ -298,6 +380,25 @@ namespace Imigration.Web.Areas.UserPanel.Controllers
             return new JsonResult(new { status = " SUCCESS" });
         }
 
+        #endregion
+
+        #region add question to BookMark
+        [HttpPost("AddQuestionToBookmark")]
+        public async Task<IActionResult> AddQuestionToBookMark(long questionId)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return new JsonResult(new { status = "NotAuthorized" });
+            }
+            var result = await _questionService.AddQuestionToBookmark(questionId,User.GetUserId());
+            if (!result)
+            {
+                return new JsonResult(new { status = " Error" });
+            }
+
+            return new JsonResult(new { status = " Success" });
+
+        }
         #endregion
 
     }

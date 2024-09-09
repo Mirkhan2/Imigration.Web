@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Imigration.Domains.Entities.Account;
 using Imigration.Domains.Entities.Questions;
 using Imigration.Domains.Entities.Tags;
 
@@ -10,55 +11,85 @@ namespace Imigration.Domains.Interfaces
 {
     public interface IQuestionRepository
     {
-        #region Tag
+        #region Tags
+
         Task<List<Tag>> GetAllTags();
+
         Task<IQueryable<Tag>> GetAllTagsAsQueryable();
-        Task<bool> IsExitTagByName(string name);
-        Task<Tag> GetTagByName(string name);
-        Task<bool> CheckUserRequestForTag(long userId, string tag);
+
+        Task<bool> IsExistsTagByName(string name);
+
+        Task<Tag?> GetTagByName(string name);
+
+        Task<bool> CheckUserRequestedForTag(long userId, string tag);
+
         Task AddRequestTag(RequestTag tag);
-        Task SaveChanges();
-        Task<int> RequestCountForTag(string tag);
-        Task<List<string>> GetTagListByQuestionId(long questionId); 
+
         Task AddTag(Tag tag);
+        Task RemoveTag(Tag tag);
+        Task RemoveSelectQuestionTag(SelectQuestionTag selectQuestionTag);
+
         Task UpdateTag(Tag tag);
+
+        Task SaveChanges();
+
+        Task<int> RequestCountForTag(string tag);
+
+        Task<List<string>> GetTagListByQuestionId(long questionId);
 
         #endregion
 
         #region Question
+
         Task AddQuestion(Question question);
+
+        Task AddBookmark(UserQuestionBookmark bookmark);
+
+        void RemoveBookmark(UserQuestionBookmark bookmark);
+
+        Task<bool> IsExistsQuestionInUserBookmarks(long questionId, long userId);
+
+        Task<UserQuestionBookmark?> GetBookmarkByQuestionAndUserId(long questionId, long userId);
+
         Task UpdateQuestion(Question question);
+
         Task<IQueryable<Question>> GetAllQuestions();
-        Task<Question> GetQUestionById(long id);    
-        Task<bool> IsExistsViewForQuestion( string userIp, long questionId );
 
-
+        Task<Question?> GetQuestionById(long id);
 
         #endregion
 
         #region View
 
-        Task<bool> IsExistsViewForQuestions(string userIp, long questionId);
+        Task<bool> IsExistsViewForQuestion(string userIp, long questionId);
 
         Task AddQuestionView(QuestionView view);
 
         #endregion
 
         #region Selected Tag
+
         Task AddSelectedQuestionTag(SelectQuestionTag selectQuestionTag);
+
         #endregion
 
         #region Answer
 
         Task AddAnswer(Answer answer);
-        Task AddAnswerUserScore(AnswerUserScore score);
-        Task AddQuestionUserScore(AnswerUserScore score);
-        Task UpdateAnswer(Answer answer);
-        Task<List<Answer>> GetAllQuestionAnswers(long questionId );
-        Task<Answer?> GetAnswerById(long id);
-        Task<bool> IsExistUserScoreForAnswer(long answerId, long userId);
 
-        Task<bool> IsExistUserScoreForQuestion(long questionId, long userId);
+        Task AddAnswerUserScore(AnswerUserScore score);
+
+        Task AddQuestionUserScore(QuestionUserScore score);
+
+        Task UpdateAnswer(Answer answer);
+
+        Task<List<Answer>> GetAllQuestionAnswers(long questionId);
+
+        Task<Answer?> GetAnswerById(long id);
+
+        Task<bool> IsExistsUserScoreForAnswer(long answerId, long userId);
+
+        Task<bool> IsExistsUserScoreForQuestion(long questionId, long userId);
 
         #endregion
     }

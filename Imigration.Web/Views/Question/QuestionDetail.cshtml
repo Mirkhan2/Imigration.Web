@@ -52,6 +52,8 @@
                         <span><i> @Model.Score </i> امتیاز </span>
                     </header>
 
+                    @Html.AntiForgeryToken()
+
                     <article id="QuestionDetailMainBox">
                         <div class="inner">
 
@@ -64,7 +66,7 @@
                                     <button onclick="ScoreDownQuestion('@Model.Id')" class="negative"><i class="icon-caret-down"></i></button>
                                 </div>
                                 <div class="star-rating">
-                                    <button><i class="icon-star"></i></button>
+                                    <button onclick="AddQuestionToBookMark('@Model.Id')" class="@((ViewBag.IsBookMark) ? "gold-color " : string.Empty)"><i class="icon-star"></i></button>
                                 </div>
                             </div>
 
@@ -118,7 +120,7 @@
 
                     </div>
 
-                    @if (User.Identity.IsAuthenticated)
+                    @if(User.Identity.IsAuthenticated)
                     {
                         <partial name="_AnswerFormPartial" model="new AnswerQuestionViewModel { QuestionId = Model.Id }" />
                     }

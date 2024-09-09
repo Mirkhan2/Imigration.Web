@@ -11,7 +11,6 @@ namespace Imigration.Domains.Entities.Questions
 {
     public class Question : BaseEntity
     {
-
         #region Properties
 
         [Display(Name = "عنوان")]
@@ -20,6 +19,7 @@ namespace Imigration.Domains.Entities.Questions
         public string Title { get; set; }
 
         public long UserId { get; set; }
+        public long QuestionId { get; set; }
 
         [Display(Name = "توضیحات")]
         [Required(ErrorMessage = "لطفا {0} را وارد کنید")]
