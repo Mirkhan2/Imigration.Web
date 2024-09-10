@@ -301,7 +301,7 @@ namespace Imigration.Application.Services.Implementions
         }
 
 
-        public async Task<Question> GetQUestionById(long id)
+        public async Task<Question> GetQuestionById(long id)
         {
             return await _questionRepository.GetQuestionById(id);
         }
@@ -311,9 +311,9 @@ namespace Imigration.Application.Services.Implementions
             throw new NotImplementedException();
         }
 
-        public async Task<bool> AnwerQuestion(AnswerQuestionViewModel answerQuestion)
+        public async Task<bool> AnswerQuestion(AnswerQuestionViewModel answerQuestion)
         {
-            var question = await GetQUestionById(answerQuestion.QuestionId);
+            var question = await GetQuestionById(answerQuestion.QuestionId);
 
             if (question == null) return false;
 
@@ -362,7 +362,7 @@ namespace Imigration.Application.Services.Implementions
 
         public async Task<bool> AddQuestionToBookmark(long questionId, long userId)
         {
-            var question = await GetQUestionById(questionId);
+            var question = await GetQuestionById(questionId);
 
             if (question == null) return false;
 
@@ -396,7 +396,7 @@ namespace Imigration.Application.Services.Implementions
 
         public async Task<EditQuestionViewModel?> FillEditQuestionViewModel(long questionId, long userId)
         {
-            var question = await GetQUestionById(questionId);
+            var question = await GetQuestionById(questionId);
 
             if (question == null) return null;
 
@@ -510,9 +510,9 @@ namespace Imigration.Application.Services.Implementions
 
         public async Task<CreateScoreForAnswerResult> CreateScoreForQuestion(long questionId, QuestionScoreType type, long userId)
         {
-            var question = await _questionRepository.GetAnswerById(questionId);
+            var questions = await _questionRepository.GetAnswerById(questionId);
 
-            if (question == null) return CreateScoreForAnswerResult.Error;
+            if (questions == null) return CreateScoreForAnswerResult.Error;
 
             var user = await _userService.GetUserById(userId);
 
@@ -542,34 +542,71 @@ namespace Imigration.Application.Services.Implementions
 
             if (type == QuestionScoreType.Minus)
             {
-                question.Score -= 1;
+                questions.Score -= 1;
             }
             else if (type == QuestionScoreType.Plus)
             {
-                question.Score += 1;
+                questions.Score += 1;
             }
 
-            await _questionRepository.UpdateQuestion(question);
+            await _questionRepository.UpdateQuestion(questions);
 
             await _questionRepository.SaveChanges();
 
             return CreateScoreForAnswerResult.Success;
         }
 
+        public async Task<EditAnswerViewModel> FillEditAnswerViewModel(long answerId, long userId)
+        {
+            var answer = await _questionRepository.GetAnswerById(answerId);
 
+            if (answer == null) return null;
 
+            var user = await _userService.GetUserById(userId);
 
+            if (user == null) return null;
+
+            if (answer.UserId != user.Id && !user.IsAdmin)
+            {
+                return null;
+            }
+            return new EditAnswerViewModel
+            {
+                Answer = answer.Content,
+                AnswerId = answer.Id,
+                QuestionId = answer.QuestionId,
+
+            };
+        }
+
+        public async Task<bool> EditAnswer(EditAnswerViewModel editAnswerviewModel)
+        {
+            var answer = await _questionRepository.GetAnswerById(editAnswerviewModel.AnswerId);
+
+            if (answer == null) return false;
+
+            if (answer.QuestionId != editAnswerviewModel.QuestionId) return false;
+            
+
+            
+
+            var user = await _userService.GetUserById(editAnswerviewModel.UserId);
+
+            if (user == null) return false;
+
+            if (answer.UserId != user.Id && !user.IsAdmin)
+            {
+                return false;
+            }
+            answer.Content = editAnswerviewModel.Answer;
+            await _questionRepository.UpdateAnswer(answer);
+            await _questionRepository.SaveChanges();
+
+            return true;
+        }
 
         #endregion
-        public Task<Question?> GetQuestionById(long id)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<bool> AnswerQuestion(AnswerQuestionViewModel answerQuestion)
-        {
-            throw new NotImplementedException();
-        }
     }
 
 }

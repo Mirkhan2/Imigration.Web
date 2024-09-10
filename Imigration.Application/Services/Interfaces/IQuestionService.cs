@@ -57,6 +57,9 @@ namespace Imigration.Application.Services.Interfaces
 
         Task<CreateScoreForAnswerResult> CreateScoreForQuestion(long questionId, QuestionScoreType type, long userId);
 
+        Task<EditAnswerViewModel> FillEditAnswerViewModel(long answerId, long userId);  
+        Task<bool> EditAnswer(EditAnswerViewModel editAnswerviewModel);
+
         #endregion
     }
 }

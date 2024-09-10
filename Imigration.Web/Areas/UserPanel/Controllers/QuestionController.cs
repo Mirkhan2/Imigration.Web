@@ -246,6 +246,36 @@ namespace Imigration.Web.Areas.UserPanel.Controllers
             return new JsonResult(new {status = "Error"});
 
         }
+        [HttpGet("EditAnswer/{answerId}")]
+        [Authorize]
+        public async Task<IActionResult> EditAnswer(long answerId )
+        {
+            var result = await _questionService.FillEditAnswerViewModel(answerId, User.GetUserId());
+            if (result == null) return NotFound();
+
+            return View(result);  
+        }
+
+        [HttpGet("EditAnswer/{answerId}"), ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> EditAnswer(EditAnswerViewModel editAnswerViewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(editAnswerViewModel);
+            }
+            editAnswerViewModel.UserId = User.GetUserId();
+            var result = await _questionService.EditAnswer(editAnswerViewModel);
+            if (result)
+            {
+                TempData[SuccessMessage] = "success operation";
+                return RedirectToAction("QuestionDetail", "Question", new {questionId = editAnswerViewModel.QuestionId});
+            }
+
+            TempData[ErrorMessage] = "Error has operation";
+            return View();
+        }
+
         #endregion
 
         #region Score Answer
