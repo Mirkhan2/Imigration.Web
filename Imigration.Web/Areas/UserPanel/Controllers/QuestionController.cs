@@ -182,7 +182,7 @@ namespace Imigration.Web.Areas.UserPanel.Controllers
         }
         #endregion
 
-        #region Question detial
+         #region Question detial
 
         [HttpGet("question/{questionId}")]
         public async Task<IActionResult> QuestionDetail(long  questionId)

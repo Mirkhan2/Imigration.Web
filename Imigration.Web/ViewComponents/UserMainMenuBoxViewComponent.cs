@@ -7,12 +7,15 @@ namespace Imigration.Web.ViewComponents
     public class UserMainMenuBoxViewComponent : ViewComponent
     {
 
-        #region ctor
-        private readonly IUserService _userService;
+        #region Ctor
+
+        private IUserService _userService;
+
         public UserMainMenuBoxViewComponent(IUserService userService)
         {
             _userService = userService;
         }
+
         #endregion
 
         public async Task<IViewComponentResult> InvokeAsync()

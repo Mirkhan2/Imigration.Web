@@ -11,7 +11,7 @@
 
     @await RenderSectionAsync("MetaTags", false)
 
-    <partial name="_HeaderRefrences" />
+    <partial name="_HeaderReferences" />
 
     @await RenderSectionAsync("Styles", false)
 </head>
@@ -19,15 +19,15 @@
     <script src="js/modernizr.js"></script>
 
     @await RenderSectionAsync("Header", true)
-
-    @RenderBody()
+ 
+     @RenderBody()
 
     <partial name="_Footer" />
 
     <partial name="_FooterReferences" />
 
-    <partial name="_Notification" />
+     <partial name="_Notification" /> 
 
-    @await RenderSectionAsync("Scripts", false)
+    @await RenderSectionAsync("Scripts", false) 
 </body>
 </html>

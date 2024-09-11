@@ -549,7 +549,7 @@ namespace Imigration.Application.Services.Implementions
                 questions.Score += 1;
             }
 
-            await _questionRepository.UpdateQuestion(questions);
+         //   await _questionRepository.UpdateQuestion(questions);
 
             await _questionRepository.SaveChanges();
 
