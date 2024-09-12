@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
 using Imigration.Application.Extensions;
+using Imigration.Application.Services.Interfaces;
 using Imigration.Application.Statics;
+using Imigration.Domains.ViewModels.Question;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Imigration.Web.Controllers
@@ -13,9 +15,24 @@ namespace Imigration.Web.Controllers
         //{
         //    _logger = logger;
         //}
-
-        public IActionResult Index()
+        #region Ctor
+        private readonly IQuestionService _questionService;
+        public HomeController(IQuestionService questionService)
         {
+                _questionService = questionService;
+        }
+        #endregion
+
+        public async Task<IActionResult> Index()
+        {
+            var options = new FilterQuestionViewModel
+            {
+                TakeEntity = 10,
+                Sort = FilterQuestionSortEnum.NewToOld
+            };
+
+            ViewData["Questions"] = await _questionService.FilterQuestions(options);
+            
             return View();
         }
         #region Editor Upload
