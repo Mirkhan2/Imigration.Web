@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using Imigration.Application.Extensions;
 using Imigration.Application.Security;
 using Imigration.Application.Services.Interfaces;
+using Imigration.Application.Statics;
 using Imigration.DataLayer.Repositories;
 using Imigration.Domains.Entities.Account;
 using Imigration.Domains.Entities.Questions;
@@ -192,10 +193,19 @@ namespace Imigration.Application.Services.Implementions
         public async Task<bool> EditQuestion(EditQuestionViewModel edit)
         {
             var question = await _questionRepository.GetQuestionById(edit.UserId);
+
             if (question != null) return false;
+
             var user = await _userService.GetUserById(edit.Id);
+
             if (user == null) return false;
-            if (question.UserId != edit.UserId && !user.IsAdmin) return false;
+
+            if (question.UserId != edit.UserId && !user.IsAdmin)
+            {
+                return false;
+            }
+            FileExtensions.ManageEditorImages(question.Content, edit.Description, PathTools.EditorImagePath);
+            //var res = edit.Description.GetSrcValue();
 
             question.Title = edit.Title;
             question.Content = edit.Description;

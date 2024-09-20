@@ -194,6 +194,15 @@ namespace Imigration.Application.Services.Implementions
         {
             var user = await GetUserById(userId);
 
+            #region Delete Avatar 
+
+            if (user.Avatar != PathTools.DefaultUserAvatar)
+            {
+                user.Avatar.DeleteFile(PathTools.UserAvatarPath);
+            }
+
+            #endregion
+
             user.Avatar = fileName;
             await _userRepository.UpdateUser(user);
             await _userRepository.Save();
