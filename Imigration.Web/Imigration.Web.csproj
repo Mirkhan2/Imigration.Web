@@ -349,6 +349,8 @@
     <None Include="wwwroot\admin\js\validation\bootstrapValidator.min.js.map" />
     <None Include="wwwroot\admin\swf\copy_csv_xls.swf" />
     <None Include="wwwroot\admin\swf\copy_csv_xls_pdf.swf" />
+    <None Include="wwwroot\common\chart-js\chart-js-plugin.js" />
+    <None Include="wwwroot\common\chart-js\chart-js.js" />
     <None Include="wwwroot\common\ckeditor\build\ckeditor.js" />
     <None Include="wwwroot\common\ckeditor\build\ckeditor.js.map" />
     <None Include="wwwroot\common\ckeditor\build\translations\af.js" />

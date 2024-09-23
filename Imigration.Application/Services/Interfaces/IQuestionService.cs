@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Imigration.Domains.Entities.Questions;
 using Imigration.Domains.Entities.Tags;
 using Imigration.Domains.Enums;
+using Imigration.Domains.ViewModels.Admin.Tag;
 using Imigration.Domains.ViewModels.Question;
 
 namespace Imigration.Application.Services.Interfaces
@@ -60,6 +61,10 @@ namespace Imigration.Application.Services.Interfaces
         Task<EditAnswerViewModel> FillEditAnswerViewModel(long answerId, long userId);  
         Task<bool> EditAnswer(EditAnswerViewModel editAnswerviewModel);
 
+        #endregion
+
+        #region Admin
+        Task<List<TagsViewModelJson>> GetTagsViewModelJson();
         #endregion
     }
 }

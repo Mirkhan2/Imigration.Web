@@ -10,6 +10,7 @@ using Imigration.Domains.Entities.Questions;
 using Imigration.Domains.Entities.Tags;
 using Imigration.Domains.Enums;
 using Imigration.Domains.Interfaces;
+using Imigration.Domains.ViewModels.Admin.Tag;
 using Imigration.Domains.ViewModels.Common;
 using Imigration.Domains.ViewModels.Question;
 using Microsoft.EntityFrameworkCore;
@@ -219,6 +220,7 @@ namespace Imigration.Application.Services.Implementions
             #endregion
 
             #region Add New Tags
+
             if (edit.SelectedTags != null && edit.SelectedTags.Any())
             {
                 foreach (var questionSelectedTag in edit.SelectedTags)
@@ -615,6 +617,23 @@ namespace Imigration.Application.Services.Implementions
             return true;
         }
 
+
+        #endregion
+
+        #region Admin   
+
+        public async Task<List<TagsViewModelJson>> GetTagsViewModelJson()
+        {
+            var tags = await _questionRepository.GetAllTagsAsQueryable();
+            return tags.OrderByDescending(s => s.UseCount)
+               .Take(30)
+               .Select(s => new TagsViewModelJson
+               {
+                   Title = s.Title,
+                   UseCount = s.UseCount,
+
+               }).ToList();
+        }
         #endregion
 
     }
