@@ -167,6 +167,10 @@ function SubmitFilterFormPagination(pageId) {
     $("#CurrentPage").val(pageId);
     $("#filter_form").submit();
 }
+function SubmitFilterFormPagination(pageId) {
+    $("#CurrentPage").val(pageId);
+    $("#filter_ajax_form").submit();
+}
 
 function AnswerQuestionFormDone(response) {
     EndLoading('#submit-comment');

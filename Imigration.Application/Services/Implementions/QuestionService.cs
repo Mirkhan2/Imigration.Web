@@ -242,7 +242,7 @@ namespace Imigration.Application.Services.Implementions
             }
 
             #endregion
-           return true;
+            return true;
 
         }
 
@@ -546,8 +546,8 @@ namespace Imigration.Application.Services.Implementions
             var score = new QuestionUserScore()
             {
                 QuestionId = questionId,
-              Type = type,
-              UserId = userId
+                Type = type,
+                UserId = userId
             };
 
             await _questionRepository.AddQuestionUserScore(score);
@@ -561,7 +561,7 @@ namespace Imigration.Application.Services.Implementions
                 questions.Score += 1;
             }
 
-         //   await _questionRepository.UpdateQuestion(questions);
+            //   await _questionRepository.UpdateQuestion(questions);
 
             await _questionRepository.SaveChanges();
 
@@ -598,9 +598,9 @@ namespace Imigration.Application.Services.Implementions
             if (answer == null) return false;
 
             if (answer.QuestionId != editAnswerviewModel.QuestionId) return false;
-            
 
-            
+
+
 
             var user = await _userService.GetUserById(editAnswerviewModel.UserId);
 
@@ -634,6 +634,35 @@ namespace Imigration.Application.Services.Implementions
 
                }).ToList();
         }
+
+        public async Task<FilterTagAdminViewModel> FilterTagAdmin(FilterTagAdminViewModel filter)
+        {
+            var query = await _questionRepository.GetAllTagsAsQueryable();
+
+            if (!string.IsNullOrEmpty(filter.Title))
+            {
+                query = query.Where(s => s.Title.Contains(filter.Title));
+            }
+
+            switch (filter.Status)
+            {
+                case FilterAdminStatus.All:
+                    break;
+                case FilterAdminStatus.HasDescription:
+                    query = query.Where(s => !string.IsNullOrEmpty(s.Description));
+                    break;
+                case FilterAdminStatus.NoDescription:
+                    query = query.Where(s => string.IsNullOrEmpty(s.Description));
+
+                    break;
+            }
+            
+            await filter.SetPaging(query);
+            return filter;
+
+        }
+
+
         #endregion
 
     }
