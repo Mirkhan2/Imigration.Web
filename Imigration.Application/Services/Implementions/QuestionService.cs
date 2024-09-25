@@ -646,12 +646,12 @@ namespace Imigration.Application.Services.Implementions
 
             switch (filter.Status)
             {
-                case FilterAdminStatus.All:
+                case FilterTagAdminStatus.All:
                     break;
-                case FilterAdminStatus.HasDescription:
+                case FilterTagAdminStatus.HasDescription:
                     query = query.Where(s => !string.IsNullOrEmpty(s.Description));
                     break;
-                case FilterAdminStatus.NoDescription:
+                case FilterTagAdminStatus.NoDescription:
                     query = query.Where(s => string.IsNullOrEmpty(s.Description));
 
                     break;

@@ -16,7 +16,7 @@ namespace Imigration.Web.Areas.Admin.Controllers
 
         #endregion
 
-        #region filter Tags
+        #region Filter Tags
         public async Task<IActionResult> LoadFilterTagsPartial(FilterTagAdminViewModel filter)
         {
             filter.TakeEntity = 2;
@@ -27,11 +27,23 @@ namespace Imigration.Web.Areas.Admin.Controllers
             return PartialView("FilterTagPartial", result);
         }
         #endregion
+
+        #region Create Tag
+        public async Task<IActionResult> LoadCreateTagPartial( )
+        {
+
+            
+            return PartialView("CreateTagPartial" );
+        }
+        #endregion
+
+        #region Dashboard
         public async Task<IActionResult> Dashboard()
         {
-            ViewData["ChartDataJson"] = JsonConvert.SerializeObject(await _questionService.GetTagsViewModelJson()); 
+            ViewData["ChartDataJson"] = JsonConvert.SerializeObject(await _questionService.GetTagsViewModelJson());
 
             return View();
         }
+        #endregion
     }
 }

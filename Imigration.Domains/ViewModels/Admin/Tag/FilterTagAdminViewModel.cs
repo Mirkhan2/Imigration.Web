@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,21 +8,25 @@ using Imigration.Domains.ViewModels.Common;
 
 namespace Imigration.Domains.ViewModels.Admin.Tag
 {
+
     public class FilterTagAdminViewModel : Paging<Domains.Entities.Tags.Tag>
     {
         public FilterTagAdminViewModel()
         {
-            Status = FilterAdminStatus.All;
+            Status = FilterTagAdminStatus.All;
         }
+
         public string? Title { get; set; }
-        public FilterAdminStatus Status { get; set; }
+
+        public FilterTagAdminStatus Status { get; set; }
     }
-    public enum FilterAdminStatus
+
+    public enum FilterTagAdminStatus
     {
-        All,
+        [Display(Name = "همه")] All,
 
-        HasDescription,
+        [Display(Name = "دارای توضیحات")] HasDescription,
 
-        NoDescription
+        [Display(Name = "بدون توضیحات")] NoDescription
     }
 }
