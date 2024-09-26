@@ -662,6 +662,18 @@ namespace Imigration.Application.Services.Implementions
 
         }
 
+      public async  Task CreateTagAdmin(CreateTagAdminViewModel createTagAdminViewModel)
+        {
+            var tag = new Tag
+            {
+                Description = createTagAdminViewModel.Description,
+                Title = createTagAdminViewModel.Title,
+
+            };
+            await _questionRepository.AddTag(tag);
+            await _questionRepository.SaveChanges();
+
+        }
 
         #endregion
 

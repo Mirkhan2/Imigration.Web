@@ -29,11 +29,22 @@ namespace Imigration.Web.Areas.Admin.Controllers
         #endregion
 
         #region Create Tag
-        public async Task<IActionResult> LoadCreateTagPartial( )
+        public IActionResult LoadCreateTagPartial()
         {
 
-            
             return PartialView("CreateTagPartial" );
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateTag(CreateTagAdminViewModel create)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new JsonResult(new { status = " error", message = "nicht guldig" });
+            }
+            await _questionService.CreateTagAdmin(create);
+
+            return new JsonResult(new { status = " sucess", message = " guldig" });
+
         }
         #endregion
 
