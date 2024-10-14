@@ -55,6 +55,74 @@ function loadCreateTagModal() {
     });
 }
 function CreateTagDone(response) {
+    if (response.status === "error") {
+        swal({
+            title: "خطا",
+            text: response.message,
+            icon: "error",
+            button: "باشه"
+        });
+    }
+    else {
+        $("#MediumModal").modal("hide");
+        $("#filter_ajax_form").submit();
+        swal({
+            title: "elan",
+            text: response.message,
+            icon: "success",
+            button: "باشه"
+        });
 
+    }
 
+}
+function loadEditTagModal(id) {
+    $.ajax({
+        url: "/admin/home/LoadEditTagPartial",
+        type: "get",
+        data: {
+            id : id
+        },
+        beforeSend: function () {
+            StartLoading("#LargeModalBody");
+        },
+        success: function (response) {
+            EndLoading("#LargeModalBody");
+            $("#MediumModalLabel").html("  edittags");
+            $("#MediumModalBody").html(response);
+
+            $('#edit-tag-form').removeData('validator', 'unobtrusiveValidation');
+            $.validator.unobtrusive.parse('#edit-tag-form');
+
+            $("#MediumModal").modal("show");
+        },
+        error: function () {
+            EndLoading("#LargeModalBody");
+            swal({
+                title: "خطا",
+                text: "عملیات با خطا مواجه شد لطفا مجدد تلاش کنید .",
+                icon: "error",
+                button: "باشه"
+            });
+        }
+    });
+}
+function EditTagDone(response) {
+    if (response.status === "error") {
+        swal({
+            title: "خطا",
+            text: response.message,
+            icon: "error",
+            button: "باشه"
+        });
+    }
+    else {
+        $("#MediumModal").modal("hide");
+        $("#filter_ajax_form").submit();
+        swal({
+            title: "elan",
+            text: response.message,
+            icon: "success",
+            button: "باشه"
+        });
 }

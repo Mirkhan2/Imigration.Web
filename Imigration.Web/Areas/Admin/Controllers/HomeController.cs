@@ -48,6 +48,40 @@ namespace Imigration.Web.Areas.Admin.Controllers
         }
         #endregion
 
+        #region EditTag
+        public async Task<IActionResult> LoadEditTagPartial(long id)
+        {
+            var result = await _questionService.FillEditTagAdminViewModel(id);
+
+            if (result == null)
+            {
+                return PartialView("_NotFoundDataPartial");
+            }
+
+            return PartialView("_EditTagPartial" , result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditTag(EditTagViewModel edit)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new JsonResult(new { status = " error", message = "nicht guldig" });
+            }
+
+            var result = await _questionService.EditTagAdmin(edit);
+
+            if (!result)
+            {
+                return new JsonResult(new { status = " error", message = "nicht guldig" });
+
+            }
+
+            return new JsonResult(new { status = " sucess", message = " guldig" });
+
+        }
+        #endregion
+
         #region Dashboard
         public async Task<IActionResult> Dashboard()
         {

@@ -86,6 +86,10 @@ namespace Imigration.DataLayer.Repositories
         {
             _context.Remove(selectQuestionTag);
         }
+       public async Task<Tag?> GetTagById(long id)
+        {
+            return await _context.Tags.FirstOrDefaultAsync(s => s.Id == id);        
+        }
 
         #endregion
 

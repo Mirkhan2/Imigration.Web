@@ -67,6 +67,8 @@ namespace Imigration.Application.Services.Interfaces
         Task<List<TagsViewModelJson>> GetTagsViewModelJson();
         Task<FilterTagAdminViewModel> FilterTagAdmin(FilterTagAdminViewModel filter);
         Task CreateTagAdmin(CreateTagAdminViewModel createTagAdminViewModel);
+        Task<EditTagViewModel> FillEditTagAdminViewModel(long id);
+        Task<bool> EditTagAdmin(EditTagViewModel edit);
         #endregion
     }
 }

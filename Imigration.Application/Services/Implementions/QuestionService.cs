@@ -656,13 +656,13 @@ namespace Imigration.Application.Services.Implementions
 
                     break;
             }
-            
+
             await filter.SetPaging(query);
             return filter;
 
         }
 
-      public async  Task CreateTagAdmin(CreateTagAdminViewModel createTagAdminViewModel)
+        public async Task CreateTagAdmin(CreateTagAdminViewModel createTagAdminViewModel)
         {
             var tag = new Tag
             {
@@ -674,7 +674,38 @@ namespace Imigration.Application.Services.Implementions
             await _questionRepository.SaveChanges();
 
         }
+        public async Task<EditTagViewModel> FillEditTagAdminViewModel(long id)
+        {
+            var tag = await _questionRepository.GetTagById(id);
 
+            if (tag == null || tag.IsDelete)
+            {
+                return null;
+            }
+            var result = new EditTagViewModel
+            {
+                Description= tag.Description,
+                Title = tag.Title,
+                Id = tag.Id
+            };
+            return result;
+        }
+       public async Task<bool> EditTagAdmin(EditTagViewModel edit)
+        {
+            var tag = await _questionRepository.GetTagById(edit.Id);
+
+            if (tag == null || tag.IsDelete)
+            {
+                return false;
+            }
+            tag.Title = edit.Title;
+            tag.Description = edit.Description;
+            
+            await _questionRepository.UpdateTag(tag);
+            await _questionRepository.SaveChanges();    
+
+            return true;
+        }
         #endregion
 
     }
