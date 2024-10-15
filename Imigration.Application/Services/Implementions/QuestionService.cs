@@ -698,11 +698,28 @@ namespace Imigration.Application.Services.Implementions
             {
                 return false;
             }
+
             tag.Title = edit.Title;
             tag.Description = edit.Description;
             
             await _questionRepository.UpdateTag(tag);
             await _questionRepository.SaveChanges();    
+
+            return true;
+        }
+        public async Task<bool> DeleteTagAdmin(long id)
+        {
+            var tag = await _questionRepository.GetTagById(id);
+
+            if (tag == null || tag.IsDelete)
+            {
+                return false;
+            }
+
+            tag.IsDelete = true;
+
+            await _questionRepository.UpdateTag(tag);
+            await _questionRepository.SaveChanges();
 
             return true;
         }

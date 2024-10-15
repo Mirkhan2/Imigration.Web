@@ -82,6 +82,30 @@ namespace Imigration.Web.Areas.Admin.Controllers
         }
         #endregion
 
+        #region DeleteTag
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteTag(long id)
+        {
+            var result = await _questionService.DeleteTagAdmin(id);
+
+            if (!ModelState.IsValid)
+            {
+                return new JsonResult(new { status = " error", message = "nicht guldig" });
+            }
+         
+
+            return new JsonResult(new { status = " sucess", message = " guldig" });
+        }
+
+        #endregion
+
+        #region online user
+        public IActionResult ShowOnlineUsers()
+        {
+            return View();
+        }
+        #endregion
         #region Dashboard
         public async Task<IActionResult> Dashboard()
         {

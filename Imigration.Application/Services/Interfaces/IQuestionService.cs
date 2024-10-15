@@ -69,6 +69,7 @@ namespace Imigration.Application.Services.Interfaces
         Task CreateTagAdmin(CreateTagAdminViewModel createTagAdminViewModel);
         Task<EditTagViewModel> FillEditTagAdminViewModel(long id);
         Task<bool> EditTagAdmin(EditTagViewModel edit);
+        Task<bool> DeleteTagAdmin(long id);
         #endregion
     }
 }

@@ -5,6 +5,7 @@ using GoogleReCaptcha.V3.Interface;
 using Imigration.DataLayer.Context;
 using Imigration.Domains.ViewModels.Common;
 using Imigration.IoC;
+using Imigration.Web.Hubs;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSignalR();
 builder.Services.AddHttpClient<ICaptchaValidator, GoogleReCaptchaValidator>();
 builder.Services.Configure<ScoreManagementViewModel>(builder.Configuration.GetSection("ScoreManagment"));
 
@@ -85,6 +87,7 @@ app.MapControllerRoute(
 name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapHub<OnlineUsersHub>("/hubs/online-users");
 
 app.Run();
 #endregion
