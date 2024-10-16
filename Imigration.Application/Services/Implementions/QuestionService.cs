@@ -165,6 +165,7 @@ namespace Imigration.Application.Services.Implementions
             {
                 query = query.Where(s => s.Title.Contains(filter.Title));
             }
+
             switch (filter.Sort)
             {
                 case FilterTagEnum.NewToOld:
@@ -269,6 +270,20 @@ namespace Imigration.Application.Services.Implementions
             {
                 query = query.Where(s => s.Title.Contains(filter.Title.SanitizeText().Trim()));
             }
+
+            switch (filter.CheckedStatus)
+            {
+                case FilterQuestionCheckedStatus.All:
+                    break;
+                case FilterQuestionCheckedStatus.IsChecked:
+                    query = query.Where(s => s.IsChecked);
+                    break;
+                case FilterQuestionCheckedStatus.NotChecked:
+                    query = query.Where(s => !s.IsChecked);
+                    break;
+
+            }
+
 
             switch (filter.Sort)
             {
@@ -622,6 +637,7 @@ namespace Imigration.Application.Services.Implementions
 
         #region Admin   
 
+        #region Tag
         public async Task<List<TagsViewModelJson>> GetTagsViewModelJson()
         {
             var tags = await _questionRepository.GetAllTagsAsQueryable();
@@ -684,13 +700,13 @@ namespace Imigration.Application.Services.Implementions
             }
             var result = new EditTagViewModel
             {
-                Description= tag.Description,
+                Description = tag.Description,
                 Title = tag.Title,
                 Id = tag.Id
             };
             return result;
         }
-       public async Task<bool> EditTagAdmin(EditTagViewModel edit)
+        public async Task<bool> EditTagAdmin(EditTagViewModel edit)
         {
             var tag = await _questionRepository.GetTagById(edit.Id);
 
@@ -701,9 +717,9 @@ namespace Imigration.Application.Services.Implementions
 
             tag.Title = edit.Title;
             tag.Description = edit.Description;
-            
+
             await _questionRepository.UpdateTag(tag);
-            await _questionRepository.SaveChanges();    
+            await _questionRepository.SaveChanges();
 
             return true;
         }
@@ -723,6 +739,20 @@ namespace Imigration.Application.Services.Implementions
 
             return true;
         }
+        #endregion
+
+        #region Question
+        public async Task<bool> DeleteQuestion(long id)
+        {
+            var question = await _questionRepository.GetQuestionById(id);
+
+        }
+        public async Task<bool> ChangeQuestionIschecked(long id)
+        {
+
+        }
+        #endregion
+
         #endregion
 
     }

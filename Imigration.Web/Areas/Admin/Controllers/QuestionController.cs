@@ -17,8 +17,9 @@ namespace Imigration.Web.Areas.Admin.Controllers
 
         #endregion
 
-        public async Task<IActionResult> QuestionList(FilterQuestionViewModel filter)
-        {
+        public async Task<IActionResult> QuestionsList(FilterQuestionViewModel filter)
+        { 
+
             var result = await _questionService.FilterQuestions(filter);
 
             return View(result);

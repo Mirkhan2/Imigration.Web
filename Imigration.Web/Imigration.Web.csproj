@@ -443,6 +443,13 @@
     <ProjectReference Include="..\Imigration.Domains\Imigration.Domains.csproj" />
     <ProjectReference Include="..\Imigration.IoC\Imigration.IoC.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Areas\Admin\Views\Shared\_AdminNormalPaging.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
 	
 
 </Project>
