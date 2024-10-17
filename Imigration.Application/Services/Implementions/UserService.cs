@@ -7,6 +7,7 @@ using Imigration.Domains.Entities.Account;
 using Imigration.Domains.Enums;
 using Imigration.Domains.Interfaces;
 using Imigration.Domains.ViewModels.Account;
+using Imigration.Domains.ViewModels.Admin.User;
 using Imigration.Domains.ViewModels.Common;
 using Imigration.Domains.ViewModels.UserPanel.Account;
 using Microsoft.Extensions.Options;
@@ -330,6 +331,101 @@ namespace Imigration.Application.Services.Implementions
                 await _userRepository.Save();
             }
         }
+
+        #endregion
+
+        #region Admin
+
+        #region User
+        public async Task<FilterUserAdminViewModel> FilterUserAdmin(FilterUserAdminViewModel filter)
+        {
+            var query = _userRepository.GetAllUsers();
+
+            if (!string.IsNullOrEmpty(filter.UserSearch))
+            {
+                query = query.Where(s => (s.FirstName + " " + s.LastName).Trim().Contains(filter.UserSearch)
+                || s.Email.Contains(filter.UserSearch));
+            }
+
+            switch (filter.ActivationStatus)
+            {
+                case AccountActivationStatus.All:
+                    break;
+                case AccountActivationStatus.IsActive:
+                    query = query.Where(s => s.IsEmailConfirmed);
+                    break;
+                case AccountActivationStatus.NotActive:
+                    query = query.Where(s => !s.IsEmailConfirmed);
+                    break;
+            }
+
+            await filter.SetPaging(query);
+
+            return filter;
+        }
+
+        public async Task<EditUserAdminViewModel?> FillEditUserAdminViewModel(long userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+
+            if (user == null) return null;
+
+            return new EditUserAdminViewModel
+            {
+                Avatar = user.Avatar,
+                BirthDate = user.BirthDate?.ToShamsi(),
+                CityId = user.CityId,
+                CountryId = user.CountryId,
+                Description = user.Description,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                GetNewsLetter = user.GetNewsLetter,
+                IsAdmin = user.IsAdmin,
+                IsBan = user.IsBan,
+                IsEmailConfirmed = user.IsEmailConfirmed,
+                PhoneNumber = user.PhoneNumber,
+                UserId = userId,
+
+            };
+
+        }
+
+        public async Task<EditUserAdminResult> EditUserAdmin(EditUserAdminViewModel editUserAdminViewModel)
+        {
+            var user = await _userRepository.GetUserById(editUserAdminViewModel.UserId);
+
+            if (user == null) return EditUserAdminResult.UserNotFound;
+
+            if (!user.Email.Equals(editUserAdminViewModel.Email) && await _userRepository.IsExistsUserByEmail(editUserAdminViewModel.Email))
+            {
+                return EditUserAdminResult.NotValidEmail;
+            }
+            user.Email = editUserAdminViewModel.Email;
+            user.FirstName = editUserAdminViewModel.FirstName;
+            user.LastName = editUserAdminViewModel.LastName;
+            user.Avatar = editUserAdminViewModel.Avatar;
+            user.Description = editUserAdminViewModel.Description;
+            user.IsBan = editUserAdminViewModel.IsBan;
+            user.IsEmailConfirmed = editUserAdminViewModel.IsEmailConfirmed;
+            user.PhoneNumber = editUserAdminViewModel.PhoneNumber;
+            user.IsAdmin = editUserAdminViewModel.IsAdmin;
+            user.BirthDate = editUserAdminViewModel.BirthDate.ToMiladi();
+            user.PhoneNumber = editUserAdminViewModel.PhoneNumber;
+            user.CountryId = editUserAdminViewModel.CountryId;
+            user.CityId = editUserAdminViewModel.CityId;
+
+            if (!string.IsNullOrEmpty(editUserAdminViewModel.Password))
+            {
+                user.Password = PasswordHelper.EncodePasswordMd5(editUserAdminViewModel.Password);
+            }
+
+            await _userRepository.UpdateUser(user);
+            await _userRepository.Save();
+
+            return EditUserAdminResult.Success;
+        }
+        #endregion
 
         #endregion
     }

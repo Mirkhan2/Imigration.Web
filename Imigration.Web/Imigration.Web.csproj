@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\common\custom\admin-question.js" />
     <Content Remove="wwwroot\common\custom\custom.js" />
   </ItemGroup>
 
@@ -421,6 +422,7 @@
     <None Include="wwwroot\common\ckeditor\README.md" />
     <None Include="wwwroot\common\ckeditor\src\ckeditor.js" />
     <None Include="wwwroot\common\ckeditor\webpack.config.js" />
+    <None Include="wwwroot\common\custom\admin-question.js" />
     <None Include="wwwroot\common\custom\custom.js" />
     <None Include="wwwroot\common\magicsuggest\magicsuggest.js" />
   </ItemGroup>

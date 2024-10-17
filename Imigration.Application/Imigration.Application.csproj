@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="Convertors\" />
+    <Folder Include="Template\" />
   </ItemGroup>
 
   <ItemGroup>

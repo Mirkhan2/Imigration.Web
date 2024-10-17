@@ -80,6 +80,7 @@ namespace Imigration.Domains.Entities.Account
         public ICollection<QuestionUserScore> QuestionUserScores { get; set; }
 
 
+
         #endregion
     }
 }

@@ -25,31 +25,46 @@ namespace Imigration.DataLayer.Repositories
 
         public async Task CreateUser(User user)
         {
-           await _context.Users.AddAsync(user); 
+           await _context.Users.AddAsync(user);
         }
         public async Task<User> GetUserByEmail(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(s => s.Email.Equals(email));
         }
 
+        public async Task<User> GetUserByActivationCode(string activationCode)
+        {
+            return await _context.Users.FirstOrDefaultAsync(s => s.EmailActivationCode.Equals(activationCode));
+        }
+        public async Task<User?> GetUserById(long userId)
+        {
+            return await _context.Users.FirstOrDefaultAsync(s => !s.IsDelete && s.Id == userId);
+        }
         public async Task Save()
         {
            await _context.SaveChangesAsync();
         }
 
-        public async Task<User> GetUserByActivationCode(string activationCode)
-        {
-            return await _context.Users.FirstOrDefaultAsync(s=> s.EmailActivationCode.Equals(activationCode));  
-        }
 
         public async Task UpdateUser(User user)
         {
            _context.Update(user);
         }
-
-        public async Task<User?> GetUserById(long userId)
+        public IQueryable<User> GetAllUsers()
         {
-           return await _context.Users.FirstOrDefaultAsync(s => !s.IsDelete && s.Id == userId);
+            return _context.Users.Where(s => !s.IsDelete).AsQueryable();
         }
+
+        Task IUserRepository.GetAllUsers()
+        {
+            throw new NotImplementedException();
+        }
+
+        //public async Task<bool> CheckUserHasPermission(long userId, long permissionId)
+        //{
+        //    return await _context.UserPermissions
+        //        .AnyAsync(s => s.UserId == userId && s.PermissionId == permissionId);
+        //}
+
     }
 }

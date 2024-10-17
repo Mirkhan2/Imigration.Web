@@ -77,13 +77,13 @@
                                 <span>تعداد پاسخ ها : @question.AnswersCount</span>
                             </td>
                             <td class="vertical-align-middle">
-                                <span id="question-is-checked-status-@question.QuestionId" class="@(question.IsChecked ? "success" : "danger")">@(question.IsChecked ? "بررسی شده" : "بررسی نشده")</span>
-                                @if (!question.IsChecked)
+                              @*   <span id="question-is-checked-status-@question.QuestionId" class="@(question.IsChecked ? "success" : "danger")">@(question.IsChecked ? "بررسی شده" : "بررسی نشده")</span>
+                                 @if (!question.IsChecked)
                                 {
                                     <button id="question-is-checked-button-@question.QuestionId" onclick="changeQuestionIsCheckedStatus('@question.QuestionId')" class="btn btn-maroon btn-xs" style="margin-right: 6px !important;">
                                         تغییر وضعیت
                                     </button>
-                                }
+                                }  *@
                             </td>
                             <td class="vertical-align-middle">
                                 <a onclick="deleteQuestion('@question.QuestionId')" href="javascript:void(0);" class="btn btn-danger btn-circle btn-xs">

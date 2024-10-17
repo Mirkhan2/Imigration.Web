@@ -746,10 +746,27 @@ namespace Imigration.Application.Services.Implementions
         {
             var question = await _questionRepository.GetQuestionById(id);
 
+            if (question == null) return false;
+
+            question.IsDelete = true; 
+
+            await _questionRepository.UpdateQuestion(question);
+            await _questionRepository.SaveChanges();
+
+            return true;
         }
         public async Task<bool> ChangeQuestionIschecked(long id)
         {
+            var question = await _questionRepository.GetQuestionById(id);
 
+            if (question == null) return false;
+
+            question.IsChecked = true;
+
+            await _questionRepository.UpdateQuestion(question);
+            await _questionRepository.SaveChanges();
+
+            return true;
         }
         #endregion
 

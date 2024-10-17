@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Imigration.Domains.Entities.Account;
 using Imigration.Domains.ViewModels.Account;
+using Imigration.Domains.ViewModels.Admin.User;
 using Imigration.Domains.ViewModels.UserPanel.Account;
 
 namespace Imigration.Application.Services.Interfaces
@@ -31,13 +32,13 @@ namespace Imigration.Application.Services.Interfaces
         Task<ForgotPasswordResult> ForgotPassword(ForgotPasswordViewModel forgotPassword);
         #endregion
 
-        #region RAeset Password
+        #region Reset Password
 
         Task<ResetPasswordResult>  ResetPassword(ResetPasswordViewModel resetPassword);
         Task<User> GetUserByActivationCode(string activationCode);
         #endregion
 
-        #region USer Panel
+        #region User Panel
         Task<User?> GetUserById(long userId);
         Task ChangeUserAvatar(long userId, string fileName);
         Task<EditUserViewModel> FillEditUserViewModel(long userId);
@@ -45,10 +46,26 @@ namespace Imigration.Application.Services.Interfaces
         Task<ChangeUserPasswordResult> ChangeUserPassword(long userId, ChangeUserPasswordViewModel changeUserPasswor);
 
         #endregion
+
         #region User Question
 
         Task UpdateUserScoreAndMedal(long userId, int score);
 
         #endregion
+
+        #region Admin
+
+        #region User
+
+        Task<FilterUserAdminViewModel> FilterUserAdmin(FilterUserAdminViewModel filter);
+
+        Task<EditUserAdminViewModel?> FillEditUserAdminViewModel(long userId);
+
+        Task<EditUserAdminResult> EditUserAdmin(EditUserAdminViewModel editUserAdminViewModel);
+
+        #endregion
+
+        #endregion
+
     }
 }
