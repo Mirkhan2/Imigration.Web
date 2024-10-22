@@ -23,7 +23,7 @@ namespace Imigration.Domains.Interfaces
 
         IQueryable<User> GetAllUsers();
 
-     //   Task<bool> CheckUserHasPermission(long userId, long permissionId);
+      Task<bool> CheckUserHasPermission(long userId, long permissionId);
 
         Task Save();
     }

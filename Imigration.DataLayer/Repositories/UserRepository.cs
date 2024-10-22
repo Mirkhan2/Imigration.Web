@@ -55,16 +55,10 @@ namespace Imigration.DataLayer.Repositories
             return _context.Users.Where(s => !s.IsDelete).AsQueryable();
         }
 
-        Task IUserRepository.GetAllUsers()
+        public async Task<bool> CheckUserHasPermission(long userId, long permissionId)
         {
-            throw new NotImplementedException();
+            return await _context.UserPermissions
+                .AnyAsync(s => s.UserId == userId && s.PermissionId == permissionId);
         }
-
-        //public async Task<bool> CheckUserHasPermission(long userId, long permissionId)
-        //{
-        //    return await _context.UserPermissions
-        //        .AnyAsync(s => s.UserId == userId && s.PermissionId == permissionId);
-        //}
-
     }
 }
