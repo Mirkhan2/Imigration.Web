@@ -751,6 +751,7 @@ namespace Imigration.Application.Services.Implementions
             question.IsDelete = true; 
 
             await _questionRepository.UpdateQuestion(question);
+            
             await _questionRepository.SaveChanges();
 
             return true;
