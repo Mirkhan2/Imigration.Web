@@ -55,8 +55,8 @@ namespace Imigration.DataLayer.Context
             modelBuilder.Entity<EmailSetting>().HasData(new EmailSetting()
             {
                 Id = 1,
-                DisplayName = "BugFixer Email",
-                From = "toplearn.bugfixer@gmail.com",
+                DisplayName = "Imigration Email",
+                From = "EazyVisit.Imigration@gmail.com",
                 Password = "amanyxlfuwtmdlnk",
                 SMTP = "smtp.gmail.com",
                 Port = 587,
@@ -68,7 +68,8 @@ namespace Imigration.DataLayer.Context
 
             modelBuilder.Entity<User>().HasData(new User()
             {
-                Email = "mohammadmahdavi.dev@gmail.com",
+                Email = "mirkhanshams2@gmail.com",
+                //hashh pass dATA BAse
                 Password = "96-E7-92-18-96-5E-B7-2C-92-A5-49-DD-5A-33-01-12", // 111111
                 IsAdmin = true,
                 Avatar = "DefaultAvatar.png",

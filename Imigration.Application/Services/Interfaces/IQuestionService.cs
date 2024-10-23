@@ -33,6 +33,8 @@ namespace Imigration.Application.Services.Interfaces
 
         Task<Question?> GetQuestionById(long id);
 
+        Task<IQueryable<Question>> GetAllQuestions();
+
         Task<bool> AnswerQuestion(AnswerQuestionViewModel answerQuestion);
 
         Task AddViewForQuestion(string userIp, Question question);

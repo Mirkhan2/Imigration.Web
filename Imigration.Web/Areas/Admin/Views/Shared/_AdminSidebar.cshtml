@@ -4,6 +4,13 @@
     <!-- Sidebar Menu -->
     <ul class="nav sidebar-menu">
         <!--Dashboard-->
+
+        <li>
+            <a href="/">
+                <i class="menu-icon fa fa-globe"></i>
+                <span class="menu-text"> Moshahede site  </span>
+            </a>
+        </li>
         <li>
             <a asp-action="Dashboard" asp-controller="Home" asp-area="Admin">
                 <i class="menu-icon glyphicon glyphicon-home"></i>
@@ -39,6 +46,12 @@
             </a>
         </li>
     </ul>
+    <li>
+        <a asp-controller="Account" asp-action="Logout">
+            <i class="menu-icon fa fa-sign-out"></i>
+            <span class="menu-text"> khroeoj site  </span>
+        </a>
+    </li>
     <!-- /Sidebar Menu -->
 </div>
 <!-- /Page Sidebar -->

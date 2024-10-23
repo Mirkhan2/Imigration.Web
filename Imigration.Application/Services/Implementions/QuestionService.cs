@@ -755,6 +755,12 @@ namespace Imigration.Application.Services.Implementions
 
             return true;
         }
+        public async Task<IQueryable<Question>> GetAllQuestions()
+        {
+            return await _questionRepository.GetAllQuestions();
+        }
+
+
         public async Task<bool> ChangeQuestionIschecked(long id)
         {
             var question = await _questionRepository.GetQuestionById(id);
@@ -768,6 +774,8 @@ namespace Imigration.Application.Services.Implementions
 
             return true;
         }
+
+   
         #endregion
 
         #endregion
