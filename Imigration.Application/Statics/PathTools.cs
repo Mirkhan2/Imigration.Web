@@ -17,9 +17,9 @@ namespace Imigration.Application.Statics
 
 
         #endregion
-
+        //host
         #region Site
-
+        
         public static readonly string SiteAddress = "https://localhost:44367";
 
         #endregion
