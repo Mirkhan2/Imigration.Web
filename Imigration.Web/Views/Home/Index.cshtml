@@ -1,8 +1,7 @@
 ﻿@using Imigration.Domains.ViewModels.Question
-
 @{
     ViewData["Title"] = "صفحه اصلی";
-    Layout = "_Layout";
+
     var questions = ViewData["Questions"] as FilterQuestionViewModel;
 }
 
@@ -24,7 +23,7 @@
 
             <div class="search-form">
                 <form asp-controller="Question" asp-action="QuestionList" method="get" id="QuestionSearchForm">
-                    <input id="QuestionSearchInput" name="Title" question-autocomplete type="text" placeholder=" دنبال چه موضوعی میگردی ؟ ">
+                    <input question-autocomplete type="text" name="Title" id="QuestionSearchInput" placeholder=" دنبال چه موضوعی میگردی ؟ ">
                     <button type="submit"><i class="icon-search-1"></i></button>
                 </form>
             </div>
@@ -55,9 +54,7 @@
                     </div>
                 }
             </div>
-
             <div class="clearfix"></div>
-
         </div>
     </div>
     <!-- /menu -->
@@ -66,11 +63,12 @@
 <div class="container">
     <!-- questions -->
     <div class="questions-layer">
+
         <!-- questions list -->
         <div class="questions-list">
             @if (questions != null && questions.Entities.Any())
             {
-                foreach (var question in questions.Entities)
+                @foreach (var question in questions.Entities)
                 {
                     var className = string.Empty;
 
@@ -83,9 +81,8 @@
                         className = "selected";
                     }
 
-                    <!-- item -->
                     <article class="@className">
-                        <h2><a asp-action="QuestionDetail" asp-controller="Question" asp-route-questionId="@question.QuestionId">@question.Title</a></h2>
+                        <h2><a asp-area="" asp-controller="Question" asp-action="QuestionDetail" asp-route-questionId="@question.QuestionId">@question.Title</a></h2>
                         <span> @question.AnswersCount <i class="icon-comment-1"></i> </span>
                         <ul>
                             <li> پرسیده شده توسط <a href="javascript:void(0)"> @question.UserDisplayName </a> @question.CreateDate </li>
@@ -100,9 +97,12 @@
                         </ul>
                         <div class="detail">
                             <div class="tags-layer">
-                                @foreach (var tag in question.Tags)
+                                @if (question.Tags.Any())
                                 {
-                                    <a asp-action="QuestionListBtTag" asp-controller="Question" asp-route-tagName="@tag"> @tag </a>
+                                    @foreach (var tag in question.Tags)
+                                    {
+                                        <a asp-action="QuestionListByTag" asp-controller="Question" asp-route-tagName="@tag"> @tag </a>
+                                    }
                                 }
                             </div>
                             <div class="left-side">
@@ -111,21 +111,19 @@
                             </div>
                         </div>
                     </article>
-                    <!-- /item -->
                 }
             }
+            <!-- item -->
         </div>
         <!-- /questions list -->
     </div>
     <!-- /questions -->
-
     <partial name="_LeftSide" />
-
     <div class="clearfix"></div>
 </div>
 
 @section Scripts
     {
     <script src="/js/home.js"></script>
-    <partial name="_autocompletePartial" />
+    <partial name="_autoCompletePartial" />
 }

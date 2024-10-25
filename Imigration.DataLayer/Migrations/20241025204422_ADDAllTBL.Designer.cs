@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Imigration.DataLayer.Migrations
 {
     [DbContext(typeof(ImigrationDbContext))]
-    [Migration("20240905093837_AddUserCountToTag")]
-    partial class AddUserCountToTag
+    [Migration("20241025204422_ADDAllTBL")]
+    partial class ADDAllTBL
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,24 @@ namespace Imigration.DataLayer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("Imigration.Domains.Entities.Account.Permission", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Permissions");
+                });
 
             modelBuilder.Entity("Imigration.Domains.Entities.Account.User", b =>
                 {
@@ -102,6 +120,45 @@ namespace Imigration.DataLayer.Migrations
                     b.HasIndex("CountryId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Avatar = "DefaultAvatar.png",
+                            Email = "mirkhanshams2@gmail.com",
+                            EmailActivationCode = "a84924c8964b4bc48c3a8db00762baf0",
+                            GetNewsLetter = false,
+                            IsAdmin = true,
+                            IsBan = false,
+                            IsDelete = false,
+                            IsEmailConfirmed = true,
+                            Password = "96-E7-92-18-96-5E-B7-2C-92-A5-49-DD-5A-33-01-12",
+                            Score = 0
+                        });
+                });
+
+            modelBuilder.Entity("Imigration.Domains.Entities.Account.UserPermission", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<long>("PermissionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PermissionId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserPermissions");
                 });
 
             modelBuilder.Entity("Imigration.Domains.Entities.Account.UserQuestionBookmark", b =>
@@ -154,6 +211,39 @@ namespace Imigration.DataLayer.Migrations
                     b.HasIndex("ParentId");
 
                     b.ToTable("States");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CreateDate = new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3760),
+                            IsDelete = false,
+                            Title = "ایران"
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            CreateDate = new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3772),
+                            IsDelete = false,
+                            ParentId = 1L,
+                            Title = "تبریز"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            CreateDate = new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3784),
+                            IsDelete = false,
+                            ParentId = 1L,
+                            Title = "اصفهان"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            CreateDate = new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3793),
+                            IsDelete = false,
+                            ParentId = 1L,
+                            Title = "تهران"
+                        });
                 });
 
             modelBuilder.Entity("Imigration.Domains.Entities.Questions.Answer", b =>
@@ -195,6 +285,38 @@ namespace Imigration.DataLayer.Migrations
                     b.ToTable("Answers");
                 });
 
+            modelBuilder.Entity("Imigration.Domains.Entities.Questions.AnswerUserScore", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<long>("AnswerId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AnswerId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AnswerUserScores");
+                });
+
             modelBuilder.Entity("Imigration.Domains.Entities.Questions.Question", b =>
                 {
                     b.Property<long>("Id")
@@ -215,6 +337,9 @@ namespace Imigration.DataLayer.Migrations
 
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
+
+                    b.Property<long>("QuestionId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Score")
                         .HasColumnType("int");
@@ -367,13 +492,13 @@ namespace Imigration.DataLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DisplayName = "Imigration",
+                            CreateDate = new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3559),
+                            DisplayName = "Imigration Email",
                             EnableSSL = true,
-                            From = "Imigration@gmail.com",
+                            From = "EazyVisit.Imigration@gmail.com",
                             IsDefault = true,
                             IsDelete = false,
-                            Password = " strong@password",
+                            Password = "amanyxlfuwtmdlnk",
                             Port = 587,
                             SMTP = "smtp.gmail.com"
                         });
@@ -436,6 +561,24 @@ namespace Imigration.DataLayer.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tags");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            CreateDate = new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3810),
+                            IsDelete = false,
+                            Title = "برنامه نویسی",
+                            UseCount = 0
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            CreateDate = new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3821),
+                            IsDelete = false,
+                            Title = "طراحی سایت",
+                            UseCount = 0
+                        });
                 });
 
             modelBuilder.Entity("Imigration.Domains.Entities.Account.User", b =>
@@ -453,6 +596,25 @@ namespace Imigration.DataLayer.Migrations
                     b.Navigation("City");
 
                     b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("Imigration.Domains.Entities.Account.UserPermission", b =>
+                {
+                    b.HasOne("Imigration.Domains.Entities.Account.Permission", "Permission")
+                        .WithMany("UserPermission")
+                        .HasForeignKey("PermissionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Imigration.Domains.Entities.Account.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Imigration.Domains.Entities.Account.UserQuestionBookmark", b =>
@@ -499,6 +661,25 @@ namespace Imigration.DataLayer.Migrations
                         .IsRequired();
 
                     b.Navigation("Question");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Imigration.Domains.Entities.Questions.AnswerUserScore", b =>
+                {
+                    b.HasOne("Imigration.Domains.Entities.Questions.Answer", "Answer")
+                        .WithMany("AnswerUserScores")
+                        .HasForeignKey("AnswerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Imigration.Domains.Entities.Account.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Answer");
 
                     b.Navigation("User");
                 });
@@ -574,6 +755,11 @@ namespace Imigration.DataLayer.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Imigration.Domains.Entities.Account.Permission", b =>
+                {
+                    b.Navigation("UserPermission");
+                });
+
             modelBuilder.Entity("Imigration.Domains.Entities.Account.User", b =>
                 {
                     b.Navigation("Answers");
@@ -592,6 +778,11 @@ namespace Imigration.DataLayer.Migrations
                     b.Navigation("UserCities");
 
                     b.Navigation("UserCountries");
+                });
+
+            modelBuilder.Entity("Imigration.Domains.Entities.Questions.Answer", b =>
+                {
+                    b.Navigation("AnswerUserScores");
                 });
 
             modelBuilder.Entity("Imigration.Domains.Entities.Questions.Question", b =>

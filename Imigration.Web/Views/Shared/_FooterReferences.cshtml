@@ -1,14 +1,13 @@
-﻿<script src="/js/bootstrap.min.js"></script>
+﻿﻿<script src="/js/bootstrap.min.js"></script>
 <script src="/js/public.js"></script>
 <script src="/common/sweetalert/sweetalert.js"></script>
 <script src="/common/waitme/waitMe.min.js"></script>
 <script src="/common/datepicker/kamadatepicker.min.js"></script>
-<script src="/common/custom/custom.js"></script>
+<script src="/common/custom/Custom.js"></script>
 
 
 @if (User.Identity!.IsAuthenticated)
 {
-	<script src="~/common/SignalR/signal-min.js"></script>
-	<script src="~/common/SignalR/client-online-users.js"></script>
-
+    <script src="/common/signalr/signalr-min.js"></script>
+    <script src="/common/signalr/client-online-users.js"></script>
 }
