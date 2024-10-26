@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Imigration.Domains.Entities.Common;
 using Imigration.Domains.Entities.Location;
 using Imigration.Domains.Entities.Questions;
 using Imigration.Domains.Entities.Tags;
@@ -12,7 +13,7 @@ using Imigration.Domains.Enums;
 
 namespace Imigration.Domains.Entities.Account
 {
-    public class User
+    public class User : BaseEntity
     {
         #region Properties
 
@@ -64,7 +65,7 @@ namespace Imigration.Domains.Entities.Account
 
         public string Avatar { get; set; }
         public bool IsDelete { get; set; }
-        public long Id { get; set; }
+        //public long Id { get; set; }
 
         #endregion
 

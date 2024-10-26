@@ -10,7 +10,7 @@ using Imigration.Domains.Enums;
 
 namespace Imigration.Domains.Entities.Tags
 {
-    public class RequestTag :BaseEntity
+    public class RequestTag : BaseEntity
     {
         #region Properties
 

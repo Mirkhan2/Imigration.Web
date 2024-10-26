@@ -26,6 +26,7 @@ namespace Imigration.Domains.Enums
         NOtEnumScoreForDown,
 
         NOtEnumScoreForUp,
+
         UserCreateScoreBefore,
 
 

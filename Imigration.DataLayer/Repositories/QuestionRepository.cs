@@ -129,7 +129,10 @@ namespace Imigration.DataLayer.Repositories
         {
             return _context.Questions.Where(s => !s.IsDelete).AsQueryable();
         }
-
+        public IQueryable<UserQuestionBookmark> GetAllBookmarks()
+        {
+            return _context.Bookmarks.Include(s => s.Question).AsQueryable();
+        }
         public async Task<Question?> GetQuestionById(long id)
         {
             return await _context.Questions
@@ -169,7 +172,10 @@ namespace Imigration.DataLayer.Repositories
                 .Where(s => s.QuestionId == questionId)
                 .Select(s => s.Tag.Title).ToListAsync();
         }
-
+        public async Task DeleteSelectedQuestionTag(SelectQuestionTag selectQuestionTag)
+        {
+            _context.Remove(selectQuestionTag);
+        }
         #endregion
 
         #region Answer

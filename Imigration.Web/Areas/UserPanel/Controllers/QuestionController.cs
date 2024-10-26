@@ -26,7 +26,7 @@ namespace Imigration.Web.Areas.UserPanel.Controllers
         #region Create Question
         [Authorize]
         [HttpGet("create-question")]
-        public async Task<IActionResult> CreateQuestion ()
+        public async Task<IActionResult> CreateQuestion()
         {
             return View();
         }

@@ -21,11 +21,8 @@ namespace Imigration.Domains.Interfaces
 
         Task<Tag?> GetTagByName(string name);
         Task<Tag?> GetTagById(long  id);
-
         Task<bool> CheckUserRequestedForTag(long userId, string tag);
-
         Task AddRequestTag(RequestTag tag);
-
         Task AddTag(Tag tag);
         Task RemoveTag(Tag tag);
         Task RemoveSelectQuestionTag(SelectQuestionTag selectQuestionTag);
@@ -56,6 +53,8 @@ namespace Imigration.Domains.Interfaces
 
         Task<IQueryable<Question>> GetAllQuestions();
 
+        IQueryable<UserQuestionBookmark> GetAllBookmarks();
+
         Task<Question?> GetQuestionById(long id);
 
         #endregion
@@ -71,6 +70,8 @@ namespace Imigration.Domains.Interfaces
         #region Selected Tag
 
         Task AddSelectedQuestionTag(SelectQuestionTag selectQuestionTag);
+
+        Task DeleteSelectedQuestionTag(SelectQuestionTag selectQuestionTag);
 
         #endregion
 

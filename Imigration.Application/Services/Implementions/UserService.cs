@@ -425,6 +425,18 @@ namespace Imigration.Application.Services.Implementions
 
             return EditUserAdminResult.Success;
         }
+
+        public async Task<bool> CheckUserPermission(long permissionId, long userId)
+        {
+            var user = await _userRepository.GetUserById(userId);
+
+            if (user == null) return false;
+
+            if (user.IsAdmin) return true;
+
+            return await _userRepository.CheckUserHasPermission(user.Id, permissionId);
+
+        }
         #endregion
 
         #endregion

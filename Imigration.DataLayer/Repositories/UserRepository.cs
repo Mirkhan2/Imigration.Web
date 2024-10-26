@@ -20,7 +20,6 @@ namespace Imigration.DataLayer.Repositories
         public async Task<bool> IsExistsUserByEmail(string email)
         {
             return await _context.Users.AnyAsync(s => s.Email == email);
-
         }
 
         public async Task CreateUser(User user)
@@ -29,7 +28,8 @@ namespace Imigration.DataLayer.Repositories
         }
         public async Task<User> GetUserByEmail(string email)
         {
-            return await _context.Users.FirstOrDefaultAsync(s => s.Email.Equals(email));
+            //return await _context.Users.FirstOrDefaultAsync(u => u.Email.Equals(email));
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email.Equals(email));
         }
 
         public async Task<User> GetUserByActivationCode(string activationCode)

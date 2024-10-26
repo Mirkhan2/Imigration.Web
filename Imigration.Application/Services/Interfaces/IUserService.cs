@@ -63,6 +63,8 @@ namespace Imigration.Application.Services.Interfaces
 
         Task<EditUserAdminResult> EditUserAdmin(EditUserAdminViewModel editUserAdminViewModel);
 
+        Task<bool> CheckUserPermission(long permissionId, long userId);
+
         #endregion
 
         #endregion
