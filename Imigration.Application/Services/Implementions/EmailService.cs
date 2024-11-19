@@ -20,6 +20,20 @@ namespace Imigration.Application.Services.Implementions
 
         public async Task<bool> SendEmail(string to, string subject, string body)
         {
+            //MailMessage mail = new MailMessage();
+            //SmtpClient SmtpServer = new SmtpClient("smtp.gmail.com");
+            //mail.From = new MailAddress("mirkhan.shams4@gmail.com", "BugFixer");
+            //mail.To.Add(to);
+            //mail.Subject = subject;
+            //mail.Body = body;
+            //mail.IsBodyHtml = true;
+
+            //SmtpServer.Port = 587;
+            //SmtpServer.Credentials = new System.Net.NetworkCredential("mirkhan.shams4@gmail.com", "fuqijttnofjradmh");
+            //SmtpServer.EnableSsl = true;
+
+            //SmtpServer.Send(mail);
+
             try
             {
                 var defaultSiteEmail = await _siteSettingRepository.GetDefaultEmail();

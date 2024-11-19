@@ -46,13 +46,13 @@ namespace Imigration.Domains.Entities.Account
         public long? CountryId { get; set; }
         public long? CityId { get; set; }
         //khabarname
-        public bool GetNewsLetter { get; set; }
+        public bool GetNewsLetter { get; set; } = false;
 
-        public bool IsEmailConfirmed { get; set; }
+        public bool IsEmailConfirmed { get; set; } = false;
 
-        public bool IsAdmin { get; set; }
+        public bool IsAdmin { get; set; } = false;
 
-        public bool IsBan { get; set; }
+        public bool IsBan { get; set; } = false;
 
         public string EmailActivationCode { get; set; }
 
@@ -64,7 +64,7 @@ namespace Imigration.Domains.Entities.Account
         public UserMedal? Medal { get; set; }
 
         public string Avatar { get; set; }
-        public bool IsDelete { get; set; }
+
         //public long Id { get; set; }
 
         #endregion

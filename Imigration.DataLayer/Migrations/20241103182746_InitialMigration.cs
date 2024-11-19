@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Imigration.DataLayer.Migrations
 {
-    public partial class ADDAllTBL : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -105,6 +105,7 @@ namespace Imigration.DataLayer.Migrations
                     Score = table.Column<int>(type: "int", nullable: false),
                     Medal = table.Column<int>(type: "int", nullable: true),
                     Avatar = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsDelete = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -365,41 +366,41 @@ namespace Imigration.DataLayer.Migrations
             migrationBuilder.InsertData(
                 table: "EmailSettings",
                 columns: new[] { "Id", "CreateDate", "DisplayName", "EnableSSL", "From", "IsDefault", "IsDelete", "Password", "Port", "SMTP" },
-                values: new object[] { 1L, new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3559), "Imigration Email", true, "EazyVisit.Imigration@gmail.com", true, false, "amanyxlfuwtmdlnk", 587, "smtp.gmail.com" });
+                values: new object[] { 1L, new DateTime(2024, 11, 3, 19, 27, 45, 884, DateTimeKind.Local).AddTicks(3584), "Imigration Email", true, "mirkhan.shams4@gmail.com", true, false, "amanyxlfuwtmdlnk", 587, "smtp.gmail.com" });
 
             migrationBuilder.InsertData(
                 table: "States",
                 columns: new[] { "Id", "CreateDate", "IsDelete", "ParentId", "Title" },
-                values: new object[] { 1L, new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3760), false, null, "ایران" });
+                values: new object[] { 1L, new DateTime(2024, 11, 3, 19, 27, 45, 884, DateTimeKind.Local).AddTicks(3786), false, null, "ایران" });
 
             migrationBuilder.InsertData(
                 table: "Tags",
                 columns: new[] { "Id", "CreateDate", "Description", "IsDelete", "Title", "UseCount" },
                 values: new object[,]
                 {
-                    { 1L, new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3810), null, false, "برنامه نویسی", 0 },
-                    { 2L, new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3821), null, false, "طراحی سایت", 0 }
+                    { 1L, new DateTime(2024, 11, 3, 19, 27, 45, 884, DateTimeKind.Local).AddTicks(3828), null, false, "برنامه نویسی", 0 },
+                    { 2L, new DateTime(2024, 11, 3, 19, 27, 45, 884, DateTimeKind.Local).AddTicks(3835), null, false, "طراحی سایت", 0 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Avatar", "BirthDate", "CityId", "CountryId", "Description", "Email", "EmailActivationCode", "FirstName", "GetNewsLetter", "IsAdmin", "IsBan", "IsDelete", "IsEmailConfirmed", "LastName", "Medal", "Password", "PhoneNumber", "Score" },
-                values: new object[] { 1L, "DefaultAvatar.png", null, null, null, null, "mirkhanshams2@gmail.com", "a84924c8964b4bc48c3a8db00762baf0", null, false, true, false, false, true, null, null, "96-E7-92-18-96-5E-B7-2C-92-A5-49-DD-5A-33-01-12", null, 0 });
+                columns: new[] { "Id", "Avatar", "BirthDate", "CityId", "CountryId", "CreateDate", "Description", "Email", "EmailActivationCode", "FirstName", "GetNewsLetter", "IsAdmin", "IsBan", "IsDelete", "IsEmailConfirmed", "LastName", "Medal", "Password", "PhoneNumber", "Score" },
+                values: new object[] { 1L, "DefaultAvatar.png", null, null, null, new DateTime(2024, 11, 3, 19, 27, 45, 884, DateTimeKind.Local).AddTicks(3684), null, "mirkhan.shams4@gmail.com", "faf72306107a4dc2aa8994f1174d238d", null, false, true, false, false, true, null, null, "96-E7-92-18-96-5E-B7-2C-92-A5-49-DD-5A-33-01-12", null, 0 });
 
             migrationBuilder.InsertData(
                 table: "States",
                 columns: new[] { "Id", "CreateDate", "IsDelete", "ParentId", "Title" },
-                values: new object[] { 2L, new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3793), false, 1L, "تهران" });
+                values: new object[] { 2L, new DateTime(2024, 11, 3, 19, 27, 45, 884, DateTimeKind.Local).AddTicks(3813), false, 1L, "تهران" });
 
             migrationBuilder.InsertData(
                 table: "States",
                 columns: new[] { "Id", "CreateDate", "IsDelete", "ParentId", "Title" },
-                values: new object[] { 3L, new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3784), false, 1L, "اصفهان" });
+                values: new object[] { 3L, new DateTime(2024, 11, 3, 19, 27, 45, 884, DateTimeKind.Local).AddTicks(3806), false, 1L, "اصفهان" });
 
             migrationBuilder.InsertData(
                 table: "States",
                 columns: new[] { "Id", "CreateDate", "IsDelete", "ParentId", "Title" },
-                values: new object[] { 4L, new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3772), false, 1L, "تبریز" });
+                values: new object[] { 4L, new DateTime(2024, 11, 3, 19, 27, 45, 884, DateTimeKind.Local).AddTicks(3795), false, 1L, "تبریز" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Answers_QuestionId",

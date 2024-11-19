@@ -7,10 +7,6 @@ namespace Imigration.Web.Areas.Admin.Controllers
     [Authorize]
     public class AdminBaseController : Controller
     {
-
-
-
-
         public static string SuccessMessage = " SuccessMessage";
         public static string WarningMessage = " WarningMessage";
         public static string InfoMessage = " InfoMessage";

@@ -51,24 +51,24 @@ namespace Imigration.Application.Services.Implementions
             };
 
             // Add To database
-            await _userRepository.CreateUser(user);
-            await _userRepository.Save();
+            //await _userRepository.CreateUser(user);
+            //await _userRepository.Save();
 
-            #region Send Activation Email
+            
 
-            var body = $@"
-                <div> برای فعالسازی حساب کاربری خود روی لینک زیر کلیک کنید . </div>
-                <a href='{PathTools.SiteAddress}/Activate-Email/{user.EmailActivationCode}'>فعالسازی حساب کاربری</a>
-                ";
+            //var body = $@"
+            //    <div> برای فعالسازی حساب کاربری خود روی لینک زیر کلیک کنید . </div>
+            //    <a href='{PathTools.SiteAddress}/Activate-Email/{user.EmailActivationCode}'>فعالسازی حساب کاربری</a>
+            //    ";
 
-            await _emailService.SendEmail(user.Email, "فعالسازی حساب کاربری", body);
+            //await _emailService.SendEmail(user.Email, "فعالسازی حساب کاربری", body);
 
-            #endregion
+            
 
             return RegisterResult.Success;
         }
 
-        #endregion
+#endregion
 
         #region Login
         public async Task<LoginResult> CheckUserForLogin(LoginViewModel login)
@@ -142,7 +142,7 @@ namespace Imigration.Application.Services.Implementions
                 <a href='{PathTools.SiteAddress}/Reset-Password/{user.EmailActivationCode}'>فراموشی کلمه عبور</a>
                 ";
 
-            await _emailService.SendEmail(user.Email, "فراموشی کلمه عبور", body);
+            _emailService.SendEmail(user.Email, "فراموشی کلمه عبور", body);
 
             #endregion
 

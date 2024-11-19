@@ -25,7 +25,9 @@ namespace Imigration.DataLayer.Context
 
         #region DbSet
         public DbSet<User> Users { get; set; }
+
         public DbSet<EmailSetting> EmailSettings { get; set; }
+
         public DbSet<State> States { get; set; }
         public DbSet<UserQuestionBookmark> Bookmarks { get; set; }
         public DbSet<Answer> Answers { get; set; }
@@ -56,7 +58,7 @@ namespace Imigration.DataLayer.Context
             {
                 Id = 1,
                 DisplayName = "Imigration Email",
-                From = "EazyVisit.Imigration@gmail.com",
+                From = "mirkhan.shams4@gmail.com",
                 Password = "amanyxlfuwtmdlnk",
                 SMTP = "smtp.gmail.com",
                 Port = 587,
@@ -68,7 +70,7 @@ namespace Imigration.DataLayer.Context
 
             modelBuilder.Entity<User>().HasData(new User()
             {
-                Email = "mirkhanshams2@gmail.com",
+                Email = "mirkhan.shams4@gmail.com",
                 //hashh pass dATA BAse
                 Password = "96-E7-92-18-96-5E-B7-2C-92-A5-49-DD-5A-33-01-12", // 111111
                 IsAdmin = true,

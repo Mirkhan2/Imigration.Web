@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Imigration.DataLayer.Migrations
 {
     [DbContext(typeof(ImigrationDbContext))]
-    [Migration("20241025204422_ADDAllTBL")]
-    partial class ADDAllTBL
+    [Migration("20241103182746_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -62,6 +62,9 @@ namespace Imigration.DataLayer.Migrations
 
                     b.Property<long?>("CountryId")
                         .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -126,8 +129,9 @@ namespace Imigration.DataLayer.Migrations
                         {
                             Id = 1L,
                             Avatar = "DefaultAvatar.png",
-                            Email = "mirkhanshams2@gmail.com",
-                            EmailActivationCode = "a84924c8964b4bc48c3a8db00762baf0",
+                            CreateDate = new DateTime(2024, 11, 3, 19, 27, 45, 884, DateTimeKind.Local).AddTicks(3684),
+                            Email = "mirkhan.shams4@gmail.com",
+                            EmailActivationCode = "faf72306107a4dc2aa8994f1174d238d",
                             GetNewsLetter = false,
                             IsAdmin = true,
                             IsBan = false,
@@ -216,14 +220,14 @@ namespace Imigration.DataLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateDate = new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3760),
+                            CreateDate = new DateTime(2024, 11, 3, 19, 27, 45, 884, DateTimeKind.Local).AddTicks(3786),
                             IsDelete = false,
                             Title = "ایران"
                         },
                         new
                         {
                             Id = 4L,
-                            CreateDate = new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3772),
+                            CreateDate = new DateTime(2024, 11, 3, 19, 27, 45, 884, DateTimeKind.Local).AddTicks(3795),
                             IsDelete = false,
                             ParentId = 1L,
                             Title = "تبریز"
@@ -231,7 +235,7 @@ namespace Imigration.DataLayer.Migrations
                         new
                         {
                             Id = 3L,
-                            CreateDate = new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3784),
+                            CreateDate = new DateTime(2024, 11, 3, 19, 27, 45, 884, DateTimeKind.Local).AddTicks(3806),
                             IsDelete = false,
                             ParentId = 1L,
                             Title = "اصفهان"
@@ -239,7 +243,7 @@ namespace Imigration.DataLayer.Migrations
                         new
                         {
                             Id = 2L,
-                            CreateDate = new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3793),
+                            CreateDate = new DateTime(2024, 11, 3, 19, 27, 45, 884, DateTimeKind.Local).AddTicks(3813),
                             IsDelete = false,
                             ParentId = 1L,
                             Title = "تهران"
@@ -492,10 +496,10 @@ namespace Imigration.DataLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateDate = new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3559),
+                            CreateDate = new DateTime(2024, 11, 3, 19, 27, 45, 884, DateTimeKind.Local).AddTicks(3584),
                             DisplayName = "Imigration Email",
                             EnableSSL = true,
-                            From = "EazyVisit.Imigration@gmail.com",
+                            From = "mirkhan.shams4@gmail.com",
                             IsDefault = true,
                             IsDelete = false,
                             Password = "amanyxlfuwtmdlnk",
@@ -566,7 +570,7 @@ namespace Imigration.DataLayer.Migrations
                         new
                         {
                             Id = 1L,
-                            CreateDate = new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3810),
+                            CreateDate = new DateTime(2024, 11, 3, 19, 27, 45, 884, DateTimeKind.Local).AddTicks(3828),
                             IsDelete = false,
                             Title = "برنامه نویسی",
                             UseCount = 0
@@ -574,7 +578,7 @@ namespace Imigration.DataLayer.Migrations
                         new
                         {
                             Id = 2L,
-                            CreateDate = new DateTime(2024, 10, 25, 22, 44, 21, 957, DateTimeKind.Local).AddTicks(3821),
+                            CreateDate = new DateTime(2024, 11, 3, 19, 27, 45, 884, DateTimeKind.Local).AddTicks(3835),
                             IsDelete = false,
                             Title = "طراحی سایت",
                             UseCount = 0

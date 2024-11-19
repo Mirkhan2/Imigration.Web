@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Imigration.Web.Areas.UserPanel.Controllers
 {
-    public class QuestionController : BaseController
+    public class QuestionController : UserPanelBaseController
     {
         #region Ctor
         private  readonly IQuestionService _questionService;
@@ -20,10 +20,11 @@ namespace Imigration.Web.Areas.UserPanel.Controllers
         {
             _questionService = questionService;
         }
-      
+
         #endregion
 
         #region Create Question
+
         [Authorize]
         [HttpGet("create-question")]
         public async Task<IActionResult> CreateQuestion()
@@ -32,12 +33,11 @@ namespace Imigration.Web.Areas.UserPanel.Controllers
         }
 
         [Authorize]
-        [HttpPost("create-question"),ValidateAntiForgeryToken]
+        [HttpPost("create-question"), ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateQuestion(CreateQuestionViewModel createQuestion)
         {
            
-            var tagResult =
-                await _questionService.CheckTagValidation(createQuestion.SelectedTags, HttpContext.User.GetUserId());
+            var tagResult = await _questionService.CheckTagValidation(createQuestion.SelectedTags, HttpContext.User.GetUserId());
 
             if(tagResult.Status == CreateQuestionResultEnum.NotValidTag)
             {
