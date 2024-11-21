@@ -32,7 +32,7 @@ namespace Imigration.Application.Services.Implementions
 
         public async Task<RegisterResult> RegisterUser(RegisterViewModel register)
         {
-            // Check Email Exists
+            // Check Email Existsx
             if (await _userRepository.IsExistsUserByEmail(register.Email.SanitizeText().Trim().ToLower()))
             {
                 return RegisterResult.EmailExists;
